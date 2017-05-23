@@ -10,7 +10,6 @@ else
   begin
       code.run
   rescue => e
-    code.state.print_debug_info
     $stderr.puts e.message
     $stderr.puts e.backtrace
   end
