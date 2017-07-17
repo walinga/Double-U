@@ -21,10 +21,14 @@ class Main
     literals.each do |i|
       if /^\d+$/.match(i)
         insts.add(i.to_i)
-      elsif i[0]=='[' && i[-1]==']'
+      elsif /^\[((-?\d+,)*-?\d+)?\]$/.match(i)
         insts.merge(i[1..-2].split(','))
+      elsif /\w+\[((-?\d+,)*-?\d+)?\]$/.match(i)
+        p=i.split('[')
+        func_res = `echo #{p[0]} #{'['+p[1]} | python list-impl.py`
+        insts.merge(func_res[1..-3].gsub(/\s+|\n/, "").split(','))
       else
-        insts.add(i)
+        raise "Syntax error: Trying to union a non-array or int"
       end
     end
 

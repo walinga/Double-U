@@ -1,4 +1,4 @@
-require_relative 'hello'
+require_relative 'parse'
 
 if ARGV.size == 0
   puts "Usage: ruby interpreter.rb source.doubleu [args ...]"
