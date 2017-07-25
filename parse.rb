@@ -1,9 +1,13 @@
 require 'set'
+require_relative 'list-impl'
+
 class Main
   @@src
+  @@list
 
   def initialize(src)
     @@src = src
+    @@list = ListImpl.new
   end
 
   def run
@@ -19,16 +23,18 @@ class Main
     insts = Set.new
 
     literals.each do |i|
+      # Number
       if /^\d+$/.match(i)
         insts.add(i.to_i)
+      # Array
       elsif /^\[((-?\d+,)*-?\d+)?\]$/.match(i)
         insts.merge(i[1..-2].split(','))
+      #Array instruction
       elsif /\w+\[((-?\d+,)*-?\d+)?\]$/.match(i)
-        p=i.split('[')
-        func_res = `echo #{p[0]} #{'['+p[1]} | python list-impl.py`
-        insts.merge(func_res[1..-3].gsub(/\s+|\n/, "").split(','))
+        res =  eval '@@list.Impl_' + i.gsub('[','([').gsub(']','])')
+        insts.merge(res)
       else
-        raise "Syntax error: Trying to union a non-array or int"
+        raise "Double-u syntax error: Trying to union a non-array or int"
       end
     end
 
