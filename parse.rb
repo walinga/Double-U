@@ -16,31 +16,32 @@ class Main
       exit
     end
 
-    # remove all whitespace
-    @@src = @@src.gsub(/\s+|\n/, "")
+    # Since Double-U is a command-based language, we parse
+    #  each line separately
+    literals = @@src.split("\n")
 
-    literals = @@src.split('U')
-    insts = Set.new
+    vars = {} # Hash table of variables
 
-    literals.each do |i|
-      # Number
-      if /^\d+$/.match(i)
-        insts.add(i.to_i)
-      # Array
-      elsif /^\[((-?\d+,)*-?\d+)?\]$/.match(i)
-        insts.merge(i[1..-2].split(','))
-      #Array instruction
-      elsif /\w+\[((-?\d+,)*-?\d+)?\]$/.match(i)
-        res =  eval '@@list.Impl_' + i.gsub('[','([').gsub(']','])')
-        insts.merge(res)
-      else
-        raise "Double-u syntax error: Trying to union a non-array or int"
+    # TODO: Add type-checking
+    #       Add support for integer vars
+    #       Allow expressions as rvalues (maybe do actual parsing)
+    literals.each do |inst|
+      case inst
+        when /^let +(\w+) *= *\[ *((\d *)*)\] *$/
+          vars["#{$1}"] = "#{$2}".split.map { |x| x.to_i }
+          puts "let please" # debug
+        when /^print +(\w+).*/
+          # Assumes array for now
+          print vars["#{$1}"], "\n"
+          puts "You printed: #{$1}" #debug
+        when /([a-z]+) +(\w+)/
+          res = eval '@@list.Impl_' + "#{$1}(" + vars["#{$2}"].to_s + ")"
+          puts "other command: #{res}"
+        else
+          puts "oops" # debug
+          raise "Double-u syntax error: Invalid instruction"
       end
     end
 
-    ##print literals
-    insts.each do |i|
-      puts i
-    end
   end
 end
