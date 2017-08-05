@@ -1,3 +1,12 @@
 let x = [1 2 3]
-shuffle x
-print x
+let y = shuffle [4 5 6]
+let z = select x   
+print select y
+print y
+print z
+
+;; This is a comment
+let a = average x
+let b = remove x
+print a
+print b 
