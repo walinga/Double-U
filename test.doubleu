@@ -9,4 +9,9 @@ print z
 let a = average x
 let b = remove x
 print a
-print b 
+print b
+
+let c = average remove [1 3 9]
+print c
+let d = []
+print average d

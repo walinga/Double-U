@@ -25,11 +25,15 @@ class Main
   end
 
   # TODO: Add type-checking (if necessary)
-  #       Allow expressions as rvalues for list functions
+  #       Tokenize (should be pretty easy)
+  #       Allow arbitrary parentheses (may require 'real' parsing)
+  #       Print line number in error messagess
   #       Create a formal specification of the language
+  #       Test, test, test
   # DONE: Error checking - undefined functions and variables
   #       Allow expressions as rvalues
-  #       Add support for integer variables
+  #       Add support for integer variable
+  #       Allow expressions as rvalues for list functionss
   def execline(inst)
     case inst
       when /^ *$/  # Blank space
@@ -49,6 +53,7 @@ class Main
         val = execline("#{$1}")
         raise "Double-u syntax error: trying to print void" if val.nil?
         print val, "\n"
+      # List function with variable as param
       when /^([a-z]+) +(\w+) *$/
         checkFunc("#{$1}")
         checkDef("#{$2}")
@@ -57,9 +62,15 @@ class Main
           raise "Double-u syntax error: Invalid argument to function #{$1}"
         end
         return eval "@@list.Impl_#{$1}(#{input})"
-      when /([a-z]+) *\[ *((\d *)*)\] */ 
+      # List function with literal as param
+      when /^([a-z]+) *\[ *((\d *)*)\] *$/
         checkFunc("#{$1}")
         return eval "@@list.Impl_#{$1}(#{$2.split.map { |x| x.to_i}})"
+      # List function with result of another function as param
+      when /^([a-z]+) +(.*)$/
+        val = execline("#{$2}")
+        raise "Double-u syntax error: Void argument to function" if val.nil?
+        return eval "@@list.Impl_#{$1}(#{val})"
       else
         puts "oops" # debug
         raise "Double-u syntax error: Invalid instruction"
