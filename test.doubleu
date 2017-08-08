@@ -1,10 +1,10 @@
 let x = [1 2 3]
-let y = shuffle [4 5 6]
+ let y = shuffle [4 5 6]
 let z = select x   
 print select y
-print y
+print y  
 print z
-
+     
 ;; This is a comment
 let a = average x
 let b = remove x
@@ -15,3 +15,6 @@ let c = average remove [1 3 9]
 print c
 let d = []
 print average d
+
+let shuffle = shuffle shuffle [1 2 3]
+print shuffle shuffle
