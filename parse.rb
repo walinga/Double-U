@@ -5,40 +5,46 @@ class Main
   @@src
   @@list
   @@vars
+  @@linenum
 
   def initialize(src)
     @@src = src
     @@list = ListImpl.new
     @@vars = {} # Hash table of variables
+    @@linenum = 1 # variable; used for error messages
+  end
+
+  def error(string)
+    raise "Double-u syntax error: #{string}. (line #{@@linenum})"
   end
 
   def checkDef(var) 
     unless @@vars.has_key?(var)
-      raise "Double-u syntax error: Variable #{var} undeclared"
+      error "Variable #{var} undeclared"
     end
   end
 
   def checkFunc(func)
     unless eval "defined? @@list.Impl_#{func}"
-      raise "Double-u syntax error: Function #{func} not defined"
+      error "Function #{func} not defined"
     end
   end
 
   # Currently only checks if type is Array
   def checkType(var, func)
     unless var.kind_of?(Array)
-      raise "Double-u syntax error: Invalid argument to function #{func}"
+      error "Invalid argument to function #{func}"
     end
   end
 
   # TODO: Allow arbitrary parentheses (may require 'real' parsing)
-  #       Print line number in error messagess
   #       Create a formal specification of the language
   #       Test, test, test
   # DONE: Error checking - undefined functions and variables
   #       Allow expressions as rvalues
   #       Add support for integer variable
   #       Allow expressions as rvalues for list functionss
+  #       Print line number in error messages
   def execline(inst)
     case inst
       when /^$/  # Blank space
@@ -48,14 +54,14 @@ class Main
       # Expression as rvalue for 'let'
       when /^let +(\w+) *= *(.*)$/
         val = execline($2)
-        raise "Double-u syntax error: trying to assign void to a variable" if val.nil?
+        error "trying to assign void to a variable" if val.nil?
         @@vars[$1] = val
       when /^print +(\w+)$/
         checkDef($1)
         print @@vars[$1], "\n"
       when /^print +(.*)$/
         val = execline($1)
-        raise "Double-u syntax error: trying to print void" if val.nil?
+        error "trying to print void" if val.nil?
         print val, "\n"
       # List function with variable as param
       when /^([a-z]+) +(\w+)$/
@@ -75,7 +81,7 @@ class Main
         return eval "@@list.Impl_#{$1}(#{val})"
       else
         puts "oops" # debug
-        raise "Double-u syntax error: Invalid instruction"
+        error "Invalid instruction"
     end
     # The default return value is nil
     return nil
@@ -93,6 +99,7 @@ class Main
 
     literals.each do |inst|
       execline inst
+      @@linenum += 1
     end
 
   end
