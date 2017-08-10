@@ -37,10 +37,12 @@ class Main
     end
   end
 
-  # TODO: Allow arbitrary parentheses (may require 'real' parsing)
-  #       Create a formal specification of the language
+  # TODO: Create a formal specification of the language
   #       Test, test, test
-  # DONE: Error checking - undefined functions and variables
+  #       Decide whether to allow parantheses around function calls
+  #       Reason about use cases for list functions, make new ones
+  # DONE: Allow for parantheses for readability
+  #       Error checking - undefined functions and variables
   #       Allow expressions as rvalues
   #       Add support for integer variable
   #       Allow expressions as rvalues for list functionss
@@ -49,6 +51,8 @@ class Main
     case inst
       when /^$/  # Blank space
       when /^;.*$/ # Comment
+      when /^\((.*)\)$/
+        return execline($1.strip)
       when /^let +(\w+) *= *\[ *((\d *)*)\]$/
         @@vars[$1] = $2.split.map { |x| x.to_i }
       # Expression as rvalue for 'let'
