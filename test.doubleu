@@ -18,3 +18,5 @@ print average d
 
 let shuffle = shuffle (shuffle [1 2 3])
 print shuffle shuffle
+
+print shuffle merge x y

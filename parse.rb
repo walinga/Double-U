@@ -67,6 +67,13 @@ class Main
         val = execline($1)
         error "trying to print void" if val.nil?
         print val, "\n"
+      when /^merge +(\w+) (\w+)$/
+        checkDef($1)
+        checkDef($2)
+        a1, a2 = @@vars[$1], @@vars[$2]
+        checkType(a1, "merge")
+        checkType(a2,"merge")
+        return a1 + a2
       # List function with variable as param
       when /^([a-z]+) +(\w+)$/
         checkFunc($1)
