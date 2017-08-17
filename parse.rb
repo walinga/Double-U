@@ -39,7 +39,6 @@ class Main
 
   # TODO: Create a formal specification of the language
   #       Test, test, test
-  #       Decide whether to allow parantheses around function calls
   #       Reason about use cases for list functions, make new ones
   # DONE: Allow for parantheses for readability
   #       Error checking - undefined functions and variables
@@ -47,6 +46,7 @@ class Main
   #       Add support for integer variable
   #       Allow expressions as rvalues for list functionss
   #       Print line number in error messages
+  #       Add ! for any function call
   def execline(inst)
     case inst
       when /^$/  # Blank space
@@ -75,18 +75,18 @@ class Main
         checkType(a2,"merge")
         return a1 + a2
       # List function with variable as param
-      when /^([a-z]+) +(\w+)$/
+      when /^([a-z]+)! +(\w+)$/
         checkFunc($1)
         checkDef($2)
         input = @@vars[$2]
         checkType(input, $1)
         return eval "@@list.Impl_#{$1}(#{input})"
       # List function with literal as param
-      when /^([a-z]+) *\[ *((\d *)*)\]$/
+      when /^([a-z]+)! *\[ *((\d *)*)\]$/
         checkFunc($1)
         return eval "@@list.Impl_#{$1}(#{$2.split.map { |x| x.to_i}})"
       # List function with result of another function as param
-      when /^([a-z]+) +(.*)$/
+      when /^([a-z]+)! +(.*)$/
         val = execline($2)
         checkType(val, $1)
         return eval "@@list.Impl_#{$1}(#{val})"

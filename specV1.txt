@@ -1,0 +1,20 @@
+DOUBLE-U
+
+Language Specification, version 1
+
+=================================
+
+Double-u is a command-based language. Code is interpreted rather than compiled,
+meaning that an error will not cause the code preceding it to fail.
+
+The main data structure of Double-u is the array, which can be specified as for
+example, `[ 1 2 4 ]`. The various built-in functions are able to manipulate 
+arrays to produce interesting results.
+
+Built-in functions:
+`let [name] = [value]` - assigns value to name, where value can be an array or int
+`print [name]` - outputs the value of name to standard out
+`merge [name1] [name1]` - combines the values of name1 and name2 into a new array
+`[fn]! [arr]` - calls the list function fn with arr as the parameter
+
+See test.doubleu for concrete examples of these functions and their uses.
