@@ -60,6 +60,7 @@ class Main
         val = execline($2)
         error "trying to assign void to a variable" if val.nil?
         @@vars[$1] = val
+      # Note: printing literals is prohibited
       when /^print +(\w+)$/
         checkDef($1)
         print @@vars[$1], "\n"

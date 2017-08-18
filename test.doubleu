@@ -6,17 +6,19 @@ print y
 print z
      
 ;; This is a comment
-let a = average! x
+let a = mean! x
 let b = remove! x
 print a
 print b
 
-(let c = average! remove! [1 3 9])
+(let c = mean! remove! [1 3 9])
 print c
 let d = []
-print average! d
+print mean! d
 
 let shuffle = shuffle! (shuffle! [1 2 3])
 print shuffle! shuffle
 
 print shuffle! merge x y
+
+print mode! []
