@@ -4,10 +4,10 @@ Language Specification, version 1
 
 =================================
 
-Double-u is a command-based language. Code is interpreted rather than compiled,
+Double-U is a command-based language. Code is interpreted rather than compiled,
 meaning that an error will not cause the code preceding it to fail.
 
-The main data structure of Double-u is the array, which can be specified as for
+The main data structure of Double-U is the array, which can be specified as for
 example, `[ 1 2 4 ]`. The various built-in functions are able to manipulate 
 arrays to produce interesting results.
 
@@ -18,3 +18,7 @@ Built-in functions:
 `[fn]! [arr]` - calls the list function fn with arr as the parameter
 
 See test.doubleu for concrete examples of these functions and their uses.
+
+Special note on Numerical figures:
+It is important to note that Double-U only supports integers in the range [0,inf).
+As a consequence, list operations that return a number will round to the nearest integer.

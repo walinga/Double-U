@@ -22,14 +22,27 @@ def Impl_mean(x)
   return sum/x.length
 end
 
-# Consider defining median as aveage of middle two
-def Impl_median(x)
+# Helper function: Finds median of list with length < 6
+def small_median(x)
+  y = x.sort
+  k = x.length
+  return y[k/2] if k.odd?
+  # If x has an even # of elements, average middle two
+  return (y[k/2-1] + y[k/2])/2.0
+end
+
+# Recursive helper function for median
+def median_rec(x)
   return 0 if x.empty?
   if x.length < 6
-    y = x.sort
-    return y[x.length/2]
+    return small_median(x)
   end
   # Under construction
+  return median_rec x.each_slice(5).to_a.map { |i| small_median(i) }
+end
+
+def Impl_median(x)
+  return median_rec(x).round
 end
 
 # Retuns 0 for an empty list
