@@ -37,7 +37,6 @@ def median_rec(x)
   if x.length < 6
     return small_median(x)
   end
-  # Under construction
   return median_rec x.each_slice(5).to_a.map { |i| small_median(i) }
 end
 

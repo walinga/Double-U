@@ -51,6 +51,8 @@ class Main
     case inst
       when /^$/  # Blank space
       when /^;.*$/ # Comment
+      when /^(.*);.*$/
+        return execline($1.strip)
       when /^\((.*)\)$/
         return execline($1.strip)
       when /^let +(\w+) *= *\[ *((\d *)*)\]$/
@@ -96,7 +98,7 @@ class Main
         error "Invalid instruction"
     end
     # The default return value is nil
-    return nil
+    nil
   end
 
   def run
