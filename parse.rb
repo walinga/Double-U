@@ -37,16 +37,6 @@ class Main
     end
   end
 
-  # TODO: Create a formal specification of the language
-  #       Test, test, test
-  #       Reason about use cases for list functions, make new ones
-  # DONE: Allow for parantheses for readability
-  #       Error checking - undefined functions and variables
-  #       Allow expressions as rvalues
-  #       Add support for integer variable
-  #       Allow expressions as rvalues for list functionss
-  #       Print line number in error messages
-  #       Add ! for any function call
   def execline(inst)
     case inst
       when /^$/  # Blank space

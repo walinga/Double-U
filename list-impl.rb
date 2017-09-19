@@ -69,6 +69,17 @@ def Impl_remove(x)
   y.delete_at(rand(x.length))
   return y
 end
+
+## This section is for functions built using those above
+#
+
+def Impl_average(x)
+  return Impl_select([Impl_mean(x), Impl_median(x), Impl_mode(x)])
+end
+
+def Impl_gemiddelde(x)
+  return Impl_mean(Array.new(Impl_select(x)) {Impl_average(x)})
+end
   
 ## Future Ideas
 # random subset of a list
