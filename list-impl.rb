@@ -45,21 +45,13 @@ class ListImpl
 
   # Retuns 0 for an empty list
   def Impl_mode(x)
+    return 0 if x.empty?
     freq = {}
     x.each do |i|
       freq[i] = (freq.has_key? i) ? freq[i] + 1 : 0
     end
-    max, mode = 0, 0
-    x.each do |j|
-      if freq[j] > max
-        max = freq[j]
-        mode = j
-      # Consider: create a list of max value, then pick
-      elsif freq[j] == max
-        mode = [j,mode].sample
-      end
-    end
-    mode
+    max = freq.max_by{ |k,v| v }[1]
+    x.select { |j| freq[j] == max }.sample
   end
   
   def Impl_remove(x)
@@ -67,6 +59,10 @@ class ListImpl
     y = Array.new(x)
     y.delete_at(rand(x.length))
     y
+  end
+
+  def Impl_subset(x)
+    x.combination(Random.new.rand(0..x.length)).to_a
   end
 
   ## This section is for functions built using those above
