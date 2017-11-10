@@ -96,11 +96,12 @@ class Main
         type = checkType(val, $1)
         return eval "@#{type}.Impl_#{$1}(#{val})"
       else
-        puts "oops" # debug
         error "Invalid instruction"
     end
     # The default return value is nil
     nil
+  rescue NoMethodError => e
+    error e.message.split("\n").first.gsub("`Impl_","'")
   end
 
   def run

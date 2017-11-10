@@ -14,11 +14,13 @@ class ListImpl
 
   def Impl_mean(x)
     return 0 if x.empty?
-    sum = 0
-    x.each do |i|
-      sum += i
+    # Mean for arrays is an array of the element-by-element means of x
+    if x.first.is_a?(Array)
+      f, *rest = x # Can't use transpose because the sub-arrays might be diff. lengths
+      f.zip(*rest).map(&:compact).map { |x| x.reduce(:+)/x.length }      
+    else
+      x.reduce(:+)/x.length
     end
-    sum/x.length
   end
 
   # Helper function: Finds median of list with length < 6

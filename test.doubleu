@@ -43,4 +43,6 @@ twist! z
 twist! mode! [555 555 444 333]
 
 print mode! subset! [1 2 3 4 5 5 5]
+print mean! subset! [1 2 3 4]
+print gemiddelde! subset! [1 2 3 4 5]
 print lock! 5
