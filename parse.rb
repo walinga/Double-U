@@ -2,6 +2,9 @@ require 'set'
 require_relative 'list-impl'
 require_relative 'num-impl'
 
+class DoubleUError < Exception
+end
+
 class Main
   @src
   @list
@@ -18,7 +21,7 @@ class Main
   end
 
   def error(string)
-    raise "Double-u syntax error: #{string}. (line #{@linenum})"
+    raise DoubleUError, "Double-u syntax error: #{string}. (line #{@linenum})"
   end
 
   def checkDef(var) 

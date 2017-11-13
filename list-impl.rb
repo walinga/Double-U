@@ -5,7 +5,7 @@
 class ListImpl
 
   def Impl_shuffle(x)
-    x.shuffle
+    x.shuffle!
   end
   
   def Impl_select(x)
@@ -23,26 +23,61 @@ class ListImpl
     end
   end
 
-  # Helper function: Finds median of list with length < 6
+  #
+  # # Median uses the following 3 helper functions to run in O(n) time
+  #
+
   def small_median(x)
-    y = x.sort
+    x.sort!
     k = x.length
-    return y[k/2] if k.odd?
+    return x[k/2] if k.odd?
     # If x has an even # of elements, average middle two
-    (y[k/2-1] + y[k/2])/2.0
+    x.first.is_a?(Array) ? 
+      x[k/2-1].zip(x[k/2]).map(&:compact).map { |x| x.reduce(:+)/x.length.to_f }
+      : (x[k/2-1] + x[k/2])/2.0 
   end
 
-  # Recursive helper function for median
-  def median_rec(x)
-    return 0 if x.empty?
-    if x.length < 6
-      return small_median(x)
+  # Helper function to find the median of medians of x
+  def find_m(x)
+    t1 = Time.now
+    while x.length > 5
+      x = x.each_slice(5).to_a.map { |i| small_median(i) }
     end
-    median_rec x.each_slice(5).to_a.map { |i| small_median(i) }
+    small_median(x)
+  end
+
+  def kth_smallest(x,k)
+    while x.length > 5
+      m = find_m(x)
+      e,l,r = [],[],[]
+      x.each { |i| [e,l,r][m <=> i] << i }
+      if k < l.length
+        x = l
+      elsif k < l.length + e.length
+        return m
+      else # k >= l.length + e.length
+        x = r
+        k -= l.length + e.length
+      end
+    end
+    x.sort![k]
   end
 
   def Impl_median(x)
-    median_rec(x).round
+    return 0 if x.empty?
+    t1 = Time.now
+    k = kth_smallest(x, x.length/2)
+    k = k.is_a?(Array) ? k.map(&:round) : k.round
+    puts "Median is #{k} in #{(Time.now - t1)*1000} ms"
+    return k
+  end
+
+  def Impl_sortedmedian(x)
+    return 0 if x.empty?
+    t1 = Time.now
+    k = x.sort[x.length/2]
+    puts "Median is #{k} in #{(Time.now - t1)*1000} ms"
+    return k
   end
 
   # Retuns 0 for an empty list
@@ -58,9 +93,8 @@ class ListImpl
   
   def Impl_remove(x)
     return x if x.empty?
-    y = Array.new(x)
-    y.delete_at(rand(x.length))
-    y
+    x.delete_at(rand(x.length))
+    return x
   end
 
   def Impl_subset(x)
