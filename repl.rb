@@ -10,10 +10,12 @@ class Repl
 
   def run
     w = Main.new('')
+    output = ''
 
-    while input = Readline.readline(">", true)
+    while input = Readline.readline('>', true)
       begin
-        output = w.execline input
+        prev_pretty = output.to_s.gsub(',', '')
+        output = w.execline input.gsub('_', prev_pretty)
       rescue DoubleUError => e
       	puts e.message.red
       	next
@@ -24,7 +26,7 @@ class Repl
       	print_pink output
       end
     end
-  rescue Interrupt => e
+  rescue Interrupt
     print "\n"
     retry
   end   

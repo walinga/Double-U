@@ -57,6 +57,8 @@ class Main
         return execline($1.strip)
       when /^let +(\w+) *= *\[ *((\d *)*)\]$/
         @vars[$1] = $2.split.map { |x| x.to_i }
+      when /^let +(\w+) *= *(\d+)$/
+        @vars[$1] = $2.to_i
       # Expression as rvalue for 'let'
       when /^let +(\w+) *= *(.*)$/
         val = execline($2)
@@ -98,11 +100,13 @@ class Main
         val = execline($2)
         type = checkType(val, $1)
         return eval "@#{type}.Impl_#{$1}(#{val})"
+      # Just a literal var. Allows "let x = y"
+      when /^(\w+)$/
+        checkDef($1)
+        return @vars[$1]
       else
         error "Invalid instruction"
     end
-    # The default return value is nil
-    nil
   rescue NoMethodError => e
     error e.message.split("\n").first.gsub("`Impl_","'")
   end
