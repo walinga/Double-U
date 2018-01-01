@@ -1,7 +1,10 @@
 require_relative 'parse'
+require_relative 'repl'
 
-if ARGV.size == 0
-  puts "Usage: ruby interpreter.rb source.doubleu [args ...]"
+if ARGV.size > 1
+  puts "Usage: ruby doubleu.rb source.doubleu [args ...]"
+elsif ARGV.size == 0
+  Repl.new.run
 else
   source = File.read(ARGV.shift)
 
