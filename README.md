@@ -1,8 +1,6 @@
-DOUBLE-U
+# DOUBLE-U
 
-Language Specification, version 1
-
-=================================
+## Language Specification, version 1
 
 Double-U is a command-based language. Code is interpreted rather than compiled,
 meaning that an error will not cause the code preceding it to fail.
@@ -26,8 +24,16 @@ Special note on Numerical figures:
 It is important to note that Double-U only supports integers in the range [0,inf).
 As a consequence, list operations that return a number will round to the nearest integer.
 
-Explanations of some special list functions:
+### Explanations of selected list functions:
+
 `remove! [arr]` - removes an element, chosen at random, from the array
+
 `select! [arr]` - chooses a random element of the array
+
 `average! [arr]` - randomly returns either the mean, median, or mode of the array
-`gemiddelde! [arr]` - returns the mean of a random number of applications of "average!"
+
+`gmld! [arr]` - returns the mean of a random number of applications of "average!"
+
+### Explanations of selected numerical functions:
+
+`wrap! [num]` - creates an array of num elements, each chosen at random from the range [0,1000]
