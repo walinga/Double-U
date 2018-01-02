@@ -47,8 +47,7 @@ class Main
   end
 
   def execline(inst)
-    inst = inst.strip.downcase
-    case inst
+    case inst.strip.downcase
       when /^$/  # Blank space
       when /^;.*$/ # Comment
       when /^(.*);.*$/

@@ -33,13 +33,12 @@ class ListImpl
     return x[k/2] if k.odd?
     # If x has an even # of elements, average middle two
     x.first.is_a?(Array) ? 
-      x[k/2-1].zip(x[k/2]).map(&:compact).map { |x| x.reduce(:+)/x.length.to_f }
+      x[k/2-1].zip(x[k/2]).map(&:compact).map { |x| x.reduce(:+) / k.to_f }
       : (x[k/2-1] + x[k/2])/2.0 
   end
 
   # Helper function to find the median of medians of x
   def find_m(x)
-    t1 = Time.now
     while x.length > 5
       x = x.each_slice(5).to_a.map { |i| small_median(i) }
     end
@@ -84,11 +83,9 @@ class ListImpl
   def Impl_mode(x)
     return 0 if x.empty?
     freq = {}
-    x.each do |i|
-      freq[i] = (freq.has_key? i) ? freq[i] + 1 : 0
-    end
-    max = freq.max_by{ |k,v| v }[1]
-    x.select { |j| freq[j] == max }.sample
+    x.each { |i| freq[i] = (freq[i] || 0) + 1 }
+    max = freq.max_by { |k,v| v }[1]
+    freq.select { |k,v| v == max }.map(&:first).sample
   end
   
   def Impl_remove(x)
@@ -108,7 +105,7 @@ class ListImpl
     Impl_select([Impl_mean(x), Impl_median(x), Impl_mode(x)])
   end
 
-  def Impl_gemiddelde(x)
+  def Impl_gmdl(x)
     Impl_mean(Array.new(Impl_select(x)) {Impl_average(x)})
   end
   
