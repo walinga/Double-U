@@ -108,7 +108,7 @@ class Main
         error "Invalid instruction"
     end
   rescue NoMethodError => e
-    error e.message.split("\n").first.gsub("`Impl_","'")
+    error e.message.split("\n").first.gsub('Impl_', '').gsub(/#<.*>/, 'given type')
   end
 
   def run

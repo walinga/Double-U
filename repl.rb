@@ -10,16 +10,16 @@ class Repl
 
   def run
     w = Main.new('')
-    output = ''
 
     while input = Readline.readline('>', true)
       begin
-        prev_pretty = output.to_s.gsub(',', '')
-        output = w.execline input.gsub('_', prev_pretty)
+        # This lets the user type '_' to reference the previous result
+        output = w.execline "let _ = #{input}"
       rescue DoubleUError => e
       	puts e.message.red
       	next
       end
+      
       if output.nil? 
       	puts "nil"
       else
