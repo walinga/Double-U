@@ -36,7 +36,6 @@ class Main
     end
   end
 
-  # Currently only checks if type is Array
   def checkType(var, func)
     if var.kind_of?(Array)
       'list'
@@ -48,6 +47,7 @@ class Main
   end
 
   def execline(inst)
+    inst = inst.strip.downcase
     case inst
       when /^$/  # Blank space
       when /^;.*$/ # Comment
@@ -117,11 +117,8 @@ class Main
       exit
     end
 
-    # Since Double-U is a command-based language, we parse
-    #  each line separately
-    literals = @src.split("\n").map { |x| x.strip }
-
-    literals.each do |inst|
+    # Since Double-U is a command-based language, we parse each line separately
+    @src.split("\n").each do |inst|
       execline inst
       @linenum += 1
     end
