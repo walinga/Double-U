@@ -20,15 +20,13 @@ Built-in functions:
 
 See test.doubleu for concrete examples of these functions and their uses.
 
-Special note on Numerical figures:
-It is important to note that Double-U only supports integers in the range [0,inf).
-As a consequence, list operations that return a number will round to the nearest integer.
-
 ### Explanations of selected list functions:
 
 `remove! [arr]` - removes an element, chosen at random, from the array
 
 `select! [arr]` - chooses a random element of the array
+
+`mode! [arr]` - chooses one of the most frequently occuring elements of the array
 
 `average! [arr]` - randomly returns either the mean, median, or mode of the array
 

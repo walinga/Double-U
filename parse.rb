@@ -39,7 +39,7 @@ class Main
   def checkType(var, func)
     if var.kind_of?(Array)
       'list'
-    elsif var.kind_of?(Integer)
+    elsif var.kind_of?(Numeric)
       'num'
     else
       error "Invalid argument to function #{func}"

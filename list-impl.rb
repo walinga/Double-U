@@ -4,6 +4,12 @@
 
 class ListImpl
 
+  # helper to give exact rational numbers
+  def r_div(a,b)
+    r = a / b.to_r
+    r.denominator == 1 ? r.to_i : r
+  end
+
   def Impl_shuffle(x)
     x.shuffle!
   end
@@ -17,9 +23,9 @@ class ListImpl
     # Mean for arrays is an array of the element-by-element means of x
     if x.first.is_a?(Array)
       f, *rest = x # Can't use transpose because the sub-arrays might be diff. lengths
-      f.zip(*rest).map(&:compact).map { |x| x.reduce(:+)/x.length }      
+      f.zip(*rest).map(&:compact).map { |x| r_div(x.reduce(:+), x.length) }
     else
-      x.reduce(:+)/x.length
+      r_div(x.reduce(:+), x.length)
     end
   end
 
@@ -33,8 +39,8 @@ class ListImpl
     return x[k/2] if k.odd?
     # If x has an even # of elements, average middle two
     x.first.is_a?(Array) ? 
-      x[k/2-1].zip(x[k/2]).map(&:compact).map { |x| x.reduce(:+) / k.to_f }
-      : (x[k/2-1] + x[k/2])/2.0 
+      x[k/2-1].zip(x[k/2]).map(&:compact).map { |x| x.reduce(:+) / k.to_r }
+      : (x[k/2-1] + x[k/2])/2.to_r
   end
 
   # Helper function to find the median of medians of x
@@ -66,7 +72,7 @@ class ListImpl
     return 0 if x.empty?
     t1 = Time.now
     k = kth_smallest(x, x.length/2)
-    k = k.is_a?(Array) ? k.map(&:round) : k.round
+    k = r_div(k,1)
     puts "Median is #{k} in #{(Time.now - t1)*1000} ms"
     return k
   end
@@ -74,7 +80,9 @@ class ListImpl
   def Impl_sortedmedian(x)
     return 0 if x.empty?
     t1 = Time.now
-    k = x.sort[x.length/2]
+    x.sort!
+    l = x.length
+    k = l.odd? ? x[l/2] : r_div(x[l/2-1]+x[l/2], 2)
     puts "Median is #{k} in #{(Time.now - t1)*1000} ms"
     return k
   end
@@ -98,6 +106,13 @@ class ListImpl
     x.combination(Random.new.rand(0..x.length)).to_a
   end
 
+  def Impl_variance(x)
+    # more intuitive to use Impl_mean, but this avoids floating point errors
+    n = x.length
+    numerator = n * x.map{|n| n*n}.reduce(:+) - x.reduce(:+)**2
+    r_div(numerator, n**2)
+  end
+
   ## This section is for functions built using those above
   #
 
@@ -108,10 +123,6 @@ class ListImpl
   def Impl_gmdl(x)
     Impl_mean(Array.new(Impl_select(x)) {Impl_average(x)})
   end
-  
-  ## Future Ideas
-  # random subset of a list
-  # something based on current time?
 
 end
 

@@ -14,13 +14,14 @@ class Repl
     while input = Readline.readline('>', true)
       begin
         # This lets the user type '_' to reference the previous result
-        output = w.execline "let _ = #{input}"
+        cmd = input.include?('print') ? input : "let _ = #{input}"
+        output = w.execline cmd
       rescue DoubleUError => e
       	puts e.message.red
       	next
       end
       
-      if output.nil? 
+      if output.nil?
       	puts "nil"
       else
       	print_pink output
