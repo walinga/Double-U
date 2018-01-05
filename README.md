@@ -30,8 +30,14 @@ See test.doubleu for concrete examples of these functions and their uses.
 
 `average! [arr]` - randomly returns either the mean, median, or mode of the array
 
-`gmld! [arr]` - returns the mean of a random number of applications of "average!"
+`std! [arr]` - calculates the standard deviation of the array
+
+`trim! [arr]` - calls `remove! [arr]` a number of times proportional to `std! [arr]`
+
+`normalize! [arr]` - calculates and returns the [standard score](https://en.wikipedia.org/wiki/Standard_score) of each element in the array
 
 ### Explanations of selected numerical functions:
 
 `wrap! [num]` - creates an array of num elements, each chosen at random from the range [0,1000]
+
+`twist! [num]` - seeds the random number generator used by `wrap!`

@@ -107,6 +107,7 @@ class ListImpl
   end
 
   def Impl_variance(x)
+    return 0 if x.empty?
     # more intuitive to use Impl_mean, but this avoids floating point errors
     n = x.length
     numerator = n * x.map{|n| n*n}.reduce(:+) - x.reduce(:+)**2
@@ -116,12 +117,28 @@ class ListImpl
   ## This section is for functions built using those above
   #
 
+  def Impl_std(x)
+    Math.sqrt(Impl_variance(x))
+  end
+
   def Impl_average(x)
     Impl_select([Impl_mean(x), Impl_median(x), Impl_mode(x)])
   end
 
   def Impl_gmdl(x)
     Impl_mean(Array.new(Impl_select(x)) {Impl_average(x)})
+  end
+
+  def Impl_trim(x)
+    trim = Impl_std(x).to_i
+    trim.times { x = Impl_remove(x) }
+    Impl_shuffle(x)
+  end
+
+  def Impl_normalize(x)
+    mu = Impl_mean(x)
+    std_dev = Impl_std(x)
+    x.map { |n| (n-mu)/std_dev }
   end
 
 end
