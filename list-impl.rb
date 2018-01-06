@@ -53,8 +53,7 @@ class ListImpl
   end
 
   def Impl_subset(x)
-    combs = x.combination(Random.new.rand(0..x.length)).to_a
-    Impl_select(combs)
+    x.sample(Random.new.rand(0..x.length))
   end
 
   def Impl_variance(x)
@@ -93,6 +92,11 @@ class ListImpl
 
   def Impl_std(x)
     Math.sqrt(Impl_variance(x))
+  end
+
+  def Impl_quantile(x)
+    s = Impl_std(x)
+    pth_quantile(x, s-s.floor)
   end
 
   def Impl_average(x)

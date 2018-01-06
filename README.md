@@ -38,6 +38,8 @@ See test.doubleu for concrete examples of these functions and their uses.
 
 ### Explanations of selected numerical functions:
 
-`wrap! [num]` - creates an array of num elements, each chosen at random from the range [0,1000]
+`wrap! [n]` - creates an array of *n* elements, each chosen at random from the range [0,1000]
 
-`twist! [num]` - seeds the random number generator used by `wrap!`
+`twist! [n]` - seeds the random number generator used by `wrap!`
+
+`chain! [n]` - chains together a random selection of *n* commands
