@@ -34,4 +34,8 @@ class NumImpl
     print "\n"
     input
   end
+
+  def Impl_coerce(i)
+    i.is_a?(Rational) ? i.to_f : i.round
+  end
 end  

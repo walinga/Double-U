@@ -14,7 +14,7 @@ class Repl
     while input = Readline.readline('>', true)
       begin
         # This lets the user type '_' to reference the previous result
-        cmd = input.include?('print') ? input : "let _ = #{input}"
+        cmd = input =~ /print|^ *(;|$)/ ? input : "let _ = #{input}"
         output = w.execline cmd
       rescue DoubleUError => e
       	puts e.message.red

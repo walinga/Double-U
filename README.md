@@ -18,7 +18,7 @@ Built-in functions:
 `merge [name1] [name1]` - combines the values of name1 and name2 into a new array
 `[fn]! [arr]` - calls the list function fn with arr as the parameter (see below)
 
-See test.doubleu for concrete examples of these functions and their uses.
+See example.doubleu for concrete examples of these functions and their uses.
 
 ### Explanations of selected list functions:
 

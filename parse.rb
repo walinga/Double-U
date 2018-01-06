@@ -1,4 +1,3 @@
-require 'set'
 require_relative 'list-impl'
 require_relative 'num-impl'
 
@@ -36,14 +35,18 @@ class Main
     end
   end
 
-  def checkType(var, func)
+  def findType(var, func)
     if var.kind_of?(Array)
-      'list'
+      @list
     elsif var.kind_of?(Numeric)
-      'num'
+      @num
     else
       error "Invalid argument to function #{func}"
     end
+  end
+
+  def callFunction(input, name)
+    findType(input, name).send("Impl_#{name}" ,input)
   end
 
   def execline(inst)
@@ -51,9 +54,9 @@ class Main
       when /^$/  # Blank space
       when /^;.*$/ # Comment
       when /^(.*);.*$/
-        return execline($1.strip)
+        execline($1.strip)
       when /^\((.*)\)$/
-        return execline($1.strip)
+        execline($1.strip)
       when /^let +(\w+) *= *\[ *((\d *)*)\]$/
         @vars[$1] = $2.split.map { |x| x.to_i }
       when /^let +(\w+) *= *(\d+)$/
@@ -75,34 +78,30 @@ class Main
         checkDef($1)
         checkDef($2)
         a1, a2 = @vars[$1], @vars[$2]
-        if checkType(a1, "merge") != checkType(a2,"merge")
+        if findType(a1, "merge") != findType(a2,"merge")
           error "Type inputs to merge don't match"
         end
-        return a1 + a2
+        a1 + a2
       # Num function with literal as param
       when /^([a-z]+)! *(\d+)$/
         checkFunc($1)
-        return eval "@num.Impl_#{$1}(#{$2})"
+        eval "@num.Impl_#{$1}(#{$2})"
       # Any function with variable as param
       when /^([a-z]+)! +(\w+)$/
         checkFunc($1)
         checkDef($2)
-        input = @vars[$2]
-        type = checkType(input, $1)
-        return eval "@#{type}.Impl_#{$1}(#{input})"
+        callFunction(@vars[$2], $1)
       # List function with literal as param
       when /^([a-z]+)! *\[ *((\d *)*)\]$/
         checkFunc($1)
-        return eval "@list.Impl_#{$1}(#{$2.split.map { |x| x.to_i}})"
+        eval "@list.Impl_#{$1}(#{$2.split.map { |x| x.to_i}})"
       # Any function with result of another function as param
       when /^([a-z]+)! +(.*)$/
-        val = execline($2)
-        type = checkType(val, $1)
-        return eval "@#{type}.Impl_#{$1}(#{val})"
+        callFunction(execline($2), $1)
       # Just a literal var. Allows "let x = y"
       when /^(\w+)$/
         checkDef($1)
-        return @vars[$1]
+        @vars[$1]
       else
         error "Invalid instruction"
     end
