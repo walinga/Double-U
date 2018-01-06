@@ -6,7 +6,7 @@ Double-U is a command-based language. Code is interpreted rather than compiled,
 meaning that an error will not cause the code preceding it to fail.
 
 Unlike most programming language, most Double-u functions are non-deterministic.
-For example, `select` will return a random element from the given array.
+For example, `select!` will return a random element from the given array.
 
 The main data structure of Double-U is the array, which can be specified as for
 example, `[ 1 2 4 ]`. The various built-in functions are able to manipulate 
