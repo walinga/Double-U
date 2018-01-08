@@ -13,33 +13,37 @@ example, `[ 1 2 4 ]`. The various built-in functions are able to manipulate
 arrays to produce interesting results.
 
 Built-in functions:
-`let [name] = [value]` - assigns value to name, where value can be an array or int
-`print [name]` - outputs the value of name to standard out
-`merge [name1] [name1]` - combines the values of name1 and name2 into a new array
-`[fn]! [arr]` - calls the list function fn with arr as the parameter (see below)
+`let <name> = <value>` - assigns value to name, where value can be an array or int.
+`print <name>` - outputs the value of name to standard out.
+`merge <name1> <name1>` - combines the values of name1 and name2 into a new array.
+`<fn>! <arr>` - calls the list function fn with arr as the parameter (see below)
 
 See example.doubleu for concrete examples of these functions and their uses.
 
 ### Explanations of selected list functions:
 
-`remove! [arr]` - removes an element, chosen at random, from the array
+`remove! <arr>` - removes an element, chosen at random, from the array
 
-`select! [arr]` - chooses a random element of the array
+`select! <arr>` - chooses a random element of the array
 
-`mode! [arr]` - chooses one of the most frequently occuring elements of the array
+`mode! <arr>` - chooses one of the most frequently occuring elements of the array
 
-`average! [arr]` - randomly returns either the mean, median, or mode of the array
+`average! <arr>` - randomly returns either the mean, median, or mode of the array
 
-`std! [arr]` - calculates the standard deviation of the array
+`std! <arr>` - calculates the standard deviation of the array
 
-`trim! [arr]` - calls `remove! [arr]` a number of times proportional to `std! [arr]`
+`trim! <arr>` - calls `remove! [arr]` a number of times proportional to `std! [arr]`
 
-`normalize! [arr]` - calculates and returns the [standard score](https://en.wikipedia.org/wiki/Standard_score) of each element in the array
+`normalize! <arr>` - calculates and returns the [standard score](https://en.wikipedia.org/wiki/Standard_score) of each element in the array
 
 ### Explanations of selected numerical functions:
 
-`wrap! [n]` - creates an array of *n* elements, each chosen at random from the range [0,1000]
+`wrap! <n>` - creates an array of *n* elements, each chosen at random from the range [0,1000]
 
-`twist! [n]` - seeds the random number generator used by `wrap!`
+`twist! <n>` - seeds the random number generator used by `wrap!`
 
-`chain! [n]` - chains together a random selection of *n* commands
+`chain! <n>` - chains together a random selection of *n* commands
+
+### How to use the REPL:
+
+Run the REPL using `ruby doubleu.rb` from the command line. Type the command `help!` to see the full list of available commands. You can use `_` in an expression to substitute the value of the previous command executed. `^C` will clear the current line and stop any commands currently running. `^D` will exit the REPL.

@@ -87,16 +87,16 @@ class ListImpl
     r2n(upper - lower)
   end
 
+  def Impl_quantile(x)
+    x.sort!
+    pth_quantile(x, Random.new.rand)
+  end
+
   ## This section is for functions built using those above
   #
 
   def Impl_std(x)
     Math.sqrt(Impl_variance(x))
-  end
-
-  def Impl_quantile(x)
-    s = Impl_std(x)
-    pth_quantile(x, s-s.floor)
   end
 
   def Impl_average(x)

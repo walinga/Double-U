@@ -1,20 +1,17 @@
 require_relative 'list-impl'
 require_relative 'num-impl'
+require_relative 'no-arg-impl'
 
 class DoubleUError < Exception
 end
 
 class Main
-  @src
-  @list
-  @num
-  @vars
-  @linenum
 
   def initialize(src)
     @src = src
     @list = ListImpl.new
     @num = NumImpl.new
+    @noarg = NoArgImpl.new
     @vars = {} # Hash table of variables
     @linenum = 1 # variable; used for error messages
   end
@@ -26,12 +23,6 @@ class Main
   def checkDef(var) 
     unless @vars.has_key?(var)
       error "Variable #{var} undeclared"
-    end
-  end
-
-  def checkFunc(func)
-    unless eval "defined? @list.Impl_#{func} || defined? @num.Impl_#{func}"
-      error "Function #{func} not defined"
     end
   end
 
@@ -84,17 +75,17 @@ class Main
         a1 + a2
       # Num function with literal as param
       when /^([a-z]+)! *(\d+)$/
-        checkFunc($1)
         eval "@num.Impl_#{$1}(#{$2})"
       # Any function with variable as param
       when /^([a-z]+)! +(\w+)$/
-        checkFunc($1)
         checkDef($2)
         callFunction(@vars[$2], $1)
       # List function with literal as param
       when /^([a-z]+)! *\[ *((\d *)*)\]$/
-        checkFunc($1)
         eval "@list.Impl_#{$1}(#{$2.split.map { |x| x.to_i}})"
+      # No arg function
+      when /^([a-z]+)!$/
+        eval "@noarg.Impl_#{$1}"
       # Any function with result of another function as param
       when /^([a-z]+)! +(.*)$/
         callFunction(execline($2), $1)
