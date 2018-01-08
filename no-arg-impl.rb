@@ -1,5 +1,9 @@
-require_relative 'list-impl.rb'
-require_relative 'num-impl.rb'
+#
+## Functions which take no arguments
+#
+
+require_relative 'list-impl'
+require_relative 'num-impl'
 
 class NoArgImpl
 

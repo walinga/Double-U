@@ -11,6 +11,7 @@ class ListImpl
     r.denominator == 1 ? r.to_i : r
   end
 
+  # Make sure b is not a float when calling this
   def r_div(a,b)
     r2n(a / b.to_r)
   end
@@ -89,7 +90,7 @@ class ListImpl
 
   def Impl_quantile(x)
     x.sort!
-    pth_quantile(x, Random.new.rand)
+    pth_quantile(x, Random.new.rand.round(2))
   end
 
   ## This section is for functions built using those above

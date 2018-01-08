@@ -10,13 +10,13 @@ let k = 88
 let y = shuffle! [4 5 6]
 let z = select! x
 
-;; Print stuff to std out
+;; Variables and expressions can be printed to std out
 print select! y
 print y  
 print z
      
 let a = mean! x ; Inline comments are possible as well
-let b = remove! x
+let b = select! x
 print a
 print b
 
@@ -28,6 +28,7 @@ let d = []
 print ( mean! d )
 
 ;; The only restriction on variable names is the regex /\w+/
+;; However, names are case-insensitive (VAR is the same as var)
 let shuffle = shuffle! (shuffle! [1 2 3])
 print shuffle! shuffle
 
@@ -37,6 +38,12 @@ print 0x_17
 ;; Merge can be used to add arrays or ints
 let g = merge x y  ; x and y are arrays
 let h = merge a b  ; a and b are ints
+
+;; Numerical inputs must be positive, but may be fractions or decimals
+let x = 9.3333
+let y = 5/3
+print x
+print y
 
 ;;
 ;; Functions and their uses
