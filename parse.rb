@@ -54,6 +54,16 @@ class Main
     find_type(input, name).send("Impl_#{name}" ,input)
   end
 
+  def merge(k1, k2)
+    check_def(k1)
+    check_def(k2)
+    v1, v2 = @vars[k1], @vars[k2]
+    if find_type(v1, "merge") != find_type(v2,"merge")
+      error "Type inputs to merge don't match"
+    end
+    v1 + v2
+  end
+
   def execline(inst)
     case inst.strip.downcase
     when /^$/  # Blank space
@@ -80,13 +90,7 @@ class Main
       error "trying to print void" if val.nil?
       print val, "\n"
     when /^merge +(\w+) (\w+)$/
-      check_def($1)
-      check_def($2)
-      a1, a2 = @vars[$1], @vars[$2]
-      if find_type(a1, "merge") != find_type(a2,"merge")
-        error "Type inputs to merge don't match"
-      end
-      a1 + a2
+      merge($1, $2)
     # Num function with literal as param
     when /^([a-z]+)! *(#{num_regex})$/
       @num.send("Impl_#{$1}", to_num($2))

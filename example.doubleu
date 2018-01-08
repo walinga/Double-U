@@ -79,7 +79,8 @@ print trim! [1 3 5 7]      ; removes a # of elements based on std. dev.
 print quantile! [3 6 9 12] ; pth quantile of the array (p is random)
 
 ;; Numerical functions
-print twist! 1099         ; Seeds the RNG used by wrap!
+print twist! 548          ; Returns a random # in the range [n,1000]
+print twist! 1099         ;  ...or if n > 1000 in the range [0,n]
 print wrap! 10            ; Outputs a random array of n elements
 print chain! 20           ; Chains a number of commands together
 print coerce! mean! [1 2] ; Converts Rational -> Float; Float -> Int

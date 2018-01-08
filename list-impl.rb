@@ -48,13 +48,12 @@ class ListImpl
   end
   
   def Impl_remove(x)
-    return x if x.empty?
     x.delete_at(rand(x.length))
     return x
   end
 
   def Impl_subset(x)
-    x.sample(Random.new.rand(0..x.length))
+    x.sample(rand(0..x.length))
   end
 
   def Impl_variance(x)
@@ -74,12 +73,8 @@ class ListImpl
   def pth_quantile(x,p)
     m = (x.length+1)*p
     return 0 if m < 1 || m > x.length
-    if m.ceil == m
-      x[m-1]
-    else
-      j = m.floor
-      r_div(x[j-1]+x[j], 2)
-    end
+    j = m.floor
+    j == m ? x[m-1] : r_div(x[j-1]+x[j], 2)
   end
 
   def Impl_iqr(x)
@@ -90,7 +85,7 @@ class ListImpl
 
   def Impl_quantile(x)
     x.sort!
-    pth_quantile(x, Random.new.rand.round(2))
+    pth_quantile(x, rand.round(2))
   end
 
   ## This section is for functions built using those above

@@ -7,14 +7,11 @@ require_relative 'list-impl'
 class NumImpl 
 
   def Impl_twist(i)
-    seed = (Random.new(i).rand * 1000)
-    @prng = Random.new(seed)
-    seed
+    i < 1000 ? rand(i..1000) : rand(0..i)
   end
 
   def Impl_wrap(i)
-    prng = @prng || Random.new
-    Array.new(i) { prng.rand(1000) }
+    Array.new(i) { rand(1000) }
   end
 
   def Impl_chain(i)

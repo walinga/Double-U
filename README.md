@@ -40,7 +40,7 @@ See example.doubleu for concrete examples of these functions and their uses.
 
 `wrap! <n>` - creates an array of *n* elements, each chosen at random from the range [0,1000]
 
-`twist! <n>` - seeds the random number generator used by `wrap!`
+`twist! <n>` - returns a number in the range [*n*, 1000] or if *n* > 1000, the range [0, *n*]
 
 `chain! <n>` - chains together a random selection of *n* commands
 
