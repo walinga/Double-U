@@ -13,6 +13,7 @@ class Repl
 
     while input = Readline.readline('>', true)
       begin
+        exit if input == 'exit' || input == 'q'
         # This lets the user type '_' to reference the previous result
         cmd = input =~ /print|^ *(;|$)/ ? input : "let _ = #{input}"
         output = w.execline cmd

@@ -17,6 +17,7 @@ class NoArgImpl
       meths.each { |m| puts (m.to_s.gsub('Impl_','') + '!') }
       count += meths.count
     end
+    puts "\nType `exit` or `q` to exit"
     count
   end
 

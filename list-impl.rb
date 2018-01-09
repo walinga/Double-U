@@ -115,5 +115,21 @@ class ListImpl
     x.map { |n| (n-mu)/std_dev }
   end
 
+  def shape_desc(x, desc)
+    mu = Impl_mean(x)
+    top = x.map { |n| (n-mu)**desc }.reduce(:+)
+    numerator = r_div(top, x.length)
+    v = Impl_variance(x)
+    numerator / v**(desc/2r)
+  end
+
+  def Impl_skewness(x)
+    shape_desc(x, 3)
+  end
+
+  def Impl_kurtosis(x)
+    shape_desc(x, 4)
+  end
+
 end
 

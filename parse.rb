@@ -2,7 +2,7 @@ require_relative 'list-impl'
 require_relative 'num-impl'
 require_relative 'no-arg-impl'
 
-class DoubleUError < Exception
+class DoubleUError < RuntimeError
 end
 
 class Main

@@ -2,7 +2,7 @@ require_relative 'parse'
 require_relative 'repl'
 
 if ARGV.size > 1
-  puts "Usage: ruby doubleu.rb source.doubleu [args ...]"
+  puts "Usage: ruby doubleu.rb [source.doubleu]"
 elsif ARGV.size == 0
   Repl.new.run
 else

@@ -11,7 +11,7 @@ class NumImpl
   end
 
   def Impl_wrap(i)
-    Array.new(i) { rand(1000) }
+    Array.new(i.abs) { rand(1000) }
   end
 
   def Impl_chain(i)
@@ -20,7 +20,7 @@ class NumImpl
     lst = ListImpl.new
     print 'wrap'
 
-    (1..i).to_a.each do |j|
+    (1..i.abs).to_a.each do |j|
       obj = input.is_a?(Array) ? lst : self
       meth = obj.methods.grep(/Impl/).reject{|x| x =~ /chain/}.sample
       raw = meth.to_s.gsub('Impl_','')

@@ -72,6 +72,8 @@ print variance! [1 0 1] ; Equally weighted sample variance
 print std! [1 0 1]      ; Square root of the variance
 print range! [1 2 3 10] ; Max - Min
 print iqr! [1 2 3 10]   ; Interquartile Range (less biased)
+print skewness! [1 2 5] ; - right skew, 0 normal, + left skew
+print kurtosis! [1 2 5] ; 'arch' of the data (3 is normal)
 
 ;; "Cool" stats functions
 print normalize! [1 2 3]   ; array of standard scores of the elements
@@ -80,7 +82,7 @@ print quantile! [3 6 9 12] ; pth quantile of the array (p is random)
 
 ;; Numerical functions
 print twist! 548          ; Returns a random # in the range [n,1000]
-print twist! 1099         ;  ...or if n > 1000 in the range [0,n]
+print twist! 1099         ;  ...or in the range [0,n] if n > 1000
 print wrap! 10            ; Outputs a random array of n elements
 print chain! 20           ; Chains a number of commands together
 print coerce! mean! [1 2] ; Converts Rational -> Float; Float -> Int
