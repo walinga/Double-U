@@ -11,7 +11,7 @@ class ListImpl
   end
 
   def Impl_shuffle(x)
-    x.shuffle!
+    x.dup.shuffle!
   end
   
   def Impl_select(x)
@@ -25,9 +25,9 @@ class ListImpl
 
   def Impl_median(x)
     return 0 if x.empty?
-    x.sort!
-    l = x.length
-    l.odd? ? x[l/2] : @rh.r_div(x[l/2-1]+x[l/2], 2)
+    y = x.sort
+    l = y.length
+    l.odd? ? y[l/2] : @rh.r_div(y[l/2-1]+y[l/2], 2)
   end
 
   def Impl_mode(x)
@@ -39,8 +39,9 @@ class ListImpl
   end
   
   def Impl_remove(x)
-    x.delete_at(rand(x.length))
-    return x
+    y = x.dup
+    y.delete_at(rand(x.length))
+    return y
   end
 
   def Impl_subset(x)
@@ -73,14 +74,14 @@ class ListImpl
   end
 
   def Impl_iqr(x)
-    x.sort!
-    upper, lower = pth_quantile(x, 0.75), pth_quantile(x, 0.25)
+    y = x.sort
+    upper, lower = pth_quantile(y, 0.75), pth_quantile(y, 0.25)
     @rh.r2n(upper - lower)
   end
 
   def Impl_quantile(x)
-    x.sort!
-    pth_quantile(x, rand.round(2))
+    y = x.sort
+    pth_quantile(y, rand.round(2))
   end
 
   ## This section is for functions built using those above
