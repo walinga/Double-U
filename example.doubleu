@@ -66,6 +66,7 @@ print shuffle! [1 2 3 4]  ; mixes up the array
 print select! [1 2 3]     ; returns one of the elements
 print remove! [1 2 3 4 5] ; takes out one of the elements
 print subset! [1 2 3 4]   ; gives a random subset of the array
+print size! [1 2 3 4]     ; returns the length of the array
 
 ;; More stats functions
 print variance! [1 0 1] ; Equally weighted sample variance
@@ -86,3 +87,4 @@ print twist! 1099         ;  ...or in the range [0,n] if n > 1000
 print wrap! 10            ; Outputs a random array of n elements
 print chain! 20           ; Chains a number of commands together
 print coerce! mean! [1 2] ; Converts Rational -> Float; Float -> Int
+print build! 97           ; Creates a list with mean n

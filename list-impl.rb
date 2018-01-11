@@ -1,22 +1,14 @@
+require_relative 'rational-help'
+
 #
 ## Useful List Implementations
 #
 
 class ListImpl
 
-  ## helpers to give exact rational numbers
-  #
-
-  def r2n(r)
-    r.denominator == 1 ? r.to_i : r
+  def initialize
+    @rh = RationalHelp.new
   end
-
-  # Make sure b is not a float when calling this
-  def r_div(a,b)
-    r2n(a / b.to_r)
-  end
-
-  ###
 
   def Impl_shuffle(x)
     x.shuffle!
@@ -28,17 +20,16 @@ class ListImpl
 
   def Impl_mean(x)
     return 0 if x.empty?
-    r_div(x.reduce(:+), x.length)
+    @rh.r_div(x.reduce(:+), x.length)
   end
 
   def Impl_median(x)
     return 0 if x.empty?
     x.sort!
     l = x.length
-    l.odd? ? x[l/2] : r_div(x[l/2-1]+x[l/2], 2)
+    l.odd? ? x[l/2] : @rh.r_div(x[l/2-1]+x[l/2], 2)
   end
 
-  # Retuns 0 for an empty list
   def Impl_mode(x)
     return 0 if x.empty?
     freq = {}
@@ -56,12 +47,16 @@ class ListImpl
     x.sample(rand(0..x.length))
   end
 
+  def Impl_size(x)
+    x.length
+  end
+
   def Impl_variance(x)
     return 0 if x.empty?
     # more intuitive to use Impl_mean, but this avoids floating point errors
     n = x.length
     numerator = n * x.map{|n| n*n}.reduce(:+) - x.reduce(:+)**2
-    r_div(numerator, n**2)
+    @rh.r_div(numerator, n**2)
   end
 
   def Impl_range(x)
@@ -74,13 +69,13 @@ class ListImpl
     m = (x.length+1)*p
     return 0 if m < 1 || m > x.length
     j = m.floor
-    j == m ? x[m-1] : r_div(x[j-1]+x[j], 2)
+    j == m ? x[m-1] : @rh.r_div(x[j-1]+x[j], 2)
   end
 
   def Impl_iqr(x)
     x.sort!
     upper, lower = pth_quantile(x, 0.75), pth_quantile(x, 0.25)
-    r2n(upper - lower)
+    @rh.r2n(upper - lower)
   end
 
   def Impl_quantile(x)
@@ -118,7 +113,7 @@ class ListImpl
   def shape_desc(x, desc)
     mu = Impl_mean(x)
     top = x.map { |n| (n-mu)**desc }.reduce(:+)
-    numerator = r_div(top, x.length)
+    numerator = @rh.r_div(top, x.length)
     v = Impl_variance(x)
     numerator / v**(desc/2r)
   end

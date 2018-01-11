@@ -1,6 +1,7 @@
 require_relative 'list-impl'
 require_relative 'num-impl'
 require_relative 'no-arg-impl'
+require_relative 'rational-help'
 
 class DoubleUError < RuntimeError
 end
@@ -12,16 +13,17 @@ class Main
     @list = ListImpl.new
     @num = NumImpl.new
     @noarg = NoArgImpl.new
+    @rh = RationalHelp.new
     @vars = {} # Hash table of variables
     @linenum = 1 # variable; used for error messages
   end
 
   def error(string)
-    raise DoubleUError, "Double-u syntax error: #{string}. (line #{@linenum})"
+    raise DoubleUError, "Double-u runtime error: #{string}. (line #{@linenum})"
   end
 
   def num_regex
-    /\d+((\.|\/)\d+)?/
+    /-?\d+((\.|\/)\d+)?/
   end
 
   def array_regex
@@ -29,7 +31,7 @@ class Main
   end
 
   def to_num(s)
-    (s.include? '.') ? s.to_f : @list.r2n(s.to_r)
+    (s.include? '.') ? s.to_f : @rh.r2n(s.to_r)
   end
 
   def to_list(s)
