@@ -36,7 +36,7 @@ class Main
   end
 
   def to_list(s)
-    s.split.map { |x| to_num(x) }
+    s[1..-2].split.map { |x| to_num(x) }
   end
 
   def set_var(name, val)
@@ -59,6 +59,7 @@ class Main
   end
 
   def call_function(name, input)
+    return @noarg.send("Impl_#{name}") if input.nil?
     find_type(input, name).send("Impl_#{name}", input)
   end
 
@@ -71,52 +72,47 @@ class Main
     v1 + v2
   end
 
-  def execline(inst)
-    # skip blank spaces and comments
-    return if inst =~ /^(;.*| *)$/
+  def parse_expr(exp)
+    case exp
+    when /^#{array_regex}$/ then to_list(exp)
+    when /^#{num_regex}$/ then to_num(exp)
+    else execline(exp)
+    end
+  end
 
-    case inst.strip.downcase
-    when /^(.*?);.*$/
-      execline($1.strip)
-    when /^\((.*)\)$/
-      execline($1.strip)
-    when /^let +(\w+) *= *#{array_regex}$/
-      set_var($1, to_list($2))
-    when /^let +(\w+) *= *(#{num_regex})$/
-      set_var($1, to_num($2))
-    # Expression as rvalue for 'let'
-    when /^let +(\w+) *= *(.*)$/
-      set_var($1, execline($2))
-    # Note: printing literals is prohibited
-    when /^print +(\w+)$/
-      print get_var($1), "\n"
-    when /^print +(.*)$/
-      val = execline($1)
-      error 'trying to print void' if val.nil?
-      print val, "\n"
-    when /^merge +(\w+) (\w+)$/
-      merge($1, $2)
-    # Num function with literal as param
-    when /^([a-z]+)! *(#{num_regex})$/
-      @num.send("Impl_#{$1}", to_num($2))
-    # Any function with variable as param
-    when /^([a-z]+)! +(\w+)$/
-      call_function($1, get_var($2))
-    # List function with literal as param
-    when /^([a-z]+)! *#{array_regex}$/
-      @list.send("Impl_#{$1}", to_list($2))
-    # No arg function
-    when /^([a-z]+)!$/
-      @noarg.send("Impl_#{$1}")
+  def safe_print(val)
+    error 'trying to print void' if val.nil?
+    print val, "\n"
+  end
+
+  def parse_line(inst)
+    # Inline comment or brackets around code
+    if /^(?<code>.*?);.*$|^\((?<code>.*)\)$/ =~ inst
+      execline(code.strip)
+    # Variable assignment
+    elsif /^let +(?<var>\w+) *= *(?<exp>.*)$/ =~ inst
+      set_var(var, parse_expr(exp))
+    # Printing the result of an expression
+    elsif /^print +(?<code>.*)$/ =~ inst
+      safe_print(execline(code))
+    # Adding two numbers or array variables
+    elsif /^merge +(?<v1>\w+) (?<v2>\w+)$/ =~ inst
+      merge(v1, v2)
     # Any function with result of another function as param
-    when /^([a-z]+)! +(.*)$/
-      call_function($1, execline($2))
+    elsif /^(?<cmd>[a-z]+)! *(?<exp>.*)$/ =~ inst
+      call_function(cmd, parse_expr(exp))
     # Just a literal var. Allows "let x = y"
-    when /^(\w+)$/
-      get_var($1)
+    elsif /^(?<v>\w+)$/ =~ inst
+      get_var(v)
     else
       error 'Invalid instruction'
     end
+  end
+
+  def execline(inst)
+    # skip blank spaces and comments
+    return if inst =~ /^(;.*| *)$/
+    parse_line(inst.strip.downcase)
   rescue NoMethodError => e
     raise e unless e.message.include?('Impl')
     base_message = e.message.split("\n").first
