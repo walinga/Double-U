@@ -18,7 +18,7 @@ class NumImpl
     Array.new(i.abs) { rand(1000) }
   end
 
-  # Select a random command for the input, print, and execute it
+  # Selects a random command for the input, prints, and executes it
   def get_next(input)
     obj = input.is_a?(Array) ? @list : self
     meth = obj.methods.grep(/Impl/).reject { |x| x =~ /chain/ }.sample
@@ -27,11 +27,11 @@ class NumImpl
     obj.send(meth, input)
   end
 
+  # Chains together a random sequence of i commands
   def Impl_chain(i)
-    # Chain together a random sequence of i commands
     input = Impl_wrap(i)
     print 'wrap'
-    i.abs.times { input = get_next(input) }
+    i.abs.to_i.times { input = get_next(input) }
     print "\n"
     input
   end
@@ -47,15 +47,15 @@ class NumImpl
   end
 
   def Impl_build(i)
-    # i is the mean (and median) of the dataset we are building
     length = rand(1000)
     gen = get_gen(i)
 
+    # The idea here is to generate random numbers and then mirror
+    # each one through i (the median). This gives a symmetric dataset
     out = Array.new(length / 2) { rand(gen) }
     out += out.map { |k| 2 * i - k }
     out += [i] if length.odd?
-    out.shuffle!
 
-    i.is_a?(Rational) ? out.map { |p| @rh.r2n(p) } : out
+    i.is_a?(Rational) ? out.map { |p| @rh.r2n(p) }.shuffle! : out
   end
 end

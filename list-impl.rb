@@ -93,7 +93,7 @@ class ListImpl
   end
 
   def Impl_gmdl(x)
-    Impl_mean(Array.new(Impl_select(x)) { Impl_average(x) })
+    Impl_mean(Array.new(Impl_select(x).abs) { Impl_average(x) })
   end
 
   def Impl_trim(x)
@@ -105,15 +105,17 @@ class ListImpl
   def Impl_normalize(x)
     mu = Impl_mean(x)
     std_dev = Impl_std(x)
+    return x if std_dev.zero?
     x.map { |n| (n - mu) / std_dev }
   end
 
   def shape_desc(x, desc)
+    v = Impl_variance(x)
+    return 0 if v.zero?
     mu = Impl_mean(x)
     top = x.map { |n| (n - mu)**desc }.reduce(:+)
     numerator = @rh.r_div(top, x.length)
-    v = Impl_variance(x)
-    numerator / v**(desc/2r)
+    numerator / v**(desc / 2r)
   end
 
   def Impl_skewness(x)

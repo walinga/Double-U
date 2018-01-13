@@ -39,8 +39,8 @@ print 0x_17
 let g = merge x y  ; x and y are arrays
 let h = merge a b  ; a and b are ints
 
-;; Numerical inputs must be positive, but may be fractions or decimals
-let x = 9.3333
+;; Numerical inputs may also be negative, fractional or decimal
+let x = -9.3333
 let y = 5/3
 print x
 print y

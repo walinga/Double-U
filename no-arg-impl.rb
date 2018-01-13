@@ -5,7 +5,7 @@ require_relative 'num-impl'
 ## Functions which take no arguments
 #
 class NoArgImpl
-  # gather a list of methods and print them
+  # Gathers a list of methods and prints them
   def get_methods(obj)
     raw_name = obj.class.name.gsub('Impl', '')
     puts "\n#{raw_name} functions:"
