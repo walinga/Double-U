@@ -8,8 +8,9 @@ end
 
 # Heavy lifter to parse and execute lines of Double-U code
 class Main
-  def initialize(src)
+  def initialize(src, s_option)
     @src = src
+    @s_option = s_option
     @list = ListImpl.new
     @num = NumImpl.new
     @noarg = NoArgImpl.new
@@ -20,6 +21,11 @@ class Main
 
   def error(string)
     raise DoubleUError, "Double-u runtime error: #{string}. (line #{@linenum})"
+  end
+
+  def convert_strings(inst)
+    inst.gsub!(/(['"]).*?\1/) { |s| s[1..-2].unpack('C*').to_s }
+    inst.delete!(',')
   end
 
   def num_regex
@@ -98,7 +104,7 @@ class Main
     # Adding two numbers or array variables
     elsif /^merge +(?<v1>\w+) (?<v2>\w+)$/ =~ inst
       merge(v1, v2)
-    # Any function with result of another function as param
+    # Function call
     elsif /^(?<cmd>[a-z]+)! *(?<exp>.*)$/ =~ inst
       call_function(cmd, parse_expr(exp))
     # Just a literal var. Allows "let x = y"
@@ -111,7 +117,9 @@ class Main
 
   def execline(inst)
     # skip blank spaces and comments
-    return if inst =~ /^(;.*| *)$/
+    return if inst =~ /^\s*(;|$)/
+    # The 'S' option converts all strings to arrays of ints (like char*'s in C)
+    convert_strings(inst) if @s_option
     parse_line(inst.strip.downcase)
   rescue NoMethodError => e
     raise e unless e.message.include?('Impl')

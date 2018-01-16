@@ -47,3 +47,7 @@ See example.doubleu for concrete examples of these functions and their uses.
 ### How to use the REPL:
 
 Run the REPL using `ruby doubleu.rb` from the command line. Type the command `help!` to see the full list of available commands. You can use `_` in an expression to substitute the value of the previous command executed. `^C` will clear the current line and stop any commands currently running. `^D` will exit the REPL.
+
+### Options:
+
+Using the `-s` or `--string` option will replace string occurences by an array of ints everywhere in the program. For example, `"doubleu"` would become `[100, 111, 117, 98, 108, 101, 117]`. This option also works in the REPL
