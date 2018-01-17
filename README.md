@@ -50,4 +50,6 @@ Run the REPL using `ruby doubleu.rb` from the command line. Type the command `he
 
 ### Options:
 
-Using the `-s` or `--string` option will replace string occurences by an array of ints everywhere in the program. For example, `"doubleu"` would become `[100, 111, 117, 98, 108, 101, 117]`. This option also works in the REPL
+Using the `-s` or `--string` option will replace string occurences by an array of ints everywhere in the program. For example, `"doubleu"` would become `[100, 111, 117, 98, 108, 101, 117]`. This option also works in the REPL.
+
+Using the `-p` or `--print` option will output all arrays as strings. `-s` and `-p` can be combined to allow string manipulation in Double-U.

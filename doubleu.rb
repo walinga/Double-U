@@ -1,19 +1,27 @@
+require 'optparse'
+
 require_relative 'parse'
 require_relative 'repl'
 
-if ARGV.include?('-s') || ARGV.include?('--string')
-  @s_option = true
-  ARGV.reject! { |x| %w[-s --string].include? x }
-end
+options = {}
+OptionParser.new do |opts|
+  opts.banner = 'Usage: ruby doubleu.rb [source.doubleu] [options]'
 
-if ARGV.size > 1
-  puts 'Usage: ruby doubleu.rb [source.doubleu] [options]'
-elsif ARGV.empty?
-  Repl.new.run(Main.new('', @s_option))
+  opts.on('-s', '--string', 'Convert strings to int arrays') do |s|
+    options[:string] = s
+  end
+
+  opts.on('-p', '--print', 'Outputs num arrays as strings') do |p|
+    options[:print] = p
+  end
+end.parse!
+
+if ARGV.empty?
+  Repl.new.run(Main.new('', options))
 else
   source = File.read(ARGV.shift)
 
-  code = Main.new(source, @s_option)
+  code = Main.new(source, options)
 
   begin
     code.run

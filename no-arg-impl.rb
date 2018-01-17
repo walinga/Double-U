@@ -19,4 +19,8 @@ class NoArgImpl
     puts "\nType `exit` or `q` to exit"
     count
   end
+
+  def Impl_random
+    rand
+  end
 end

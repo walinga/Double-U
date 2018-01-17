@@ -58,4 +58,8 @@ class NumImpl
 
     i.is_a?(Rational) ? out.map { |p| @rh.r2n(p) }.shuffle! : out
   end
+
+  def Impl_fill(i)
+    Array.new(rand(0..1000)) { i }
+  end
 end

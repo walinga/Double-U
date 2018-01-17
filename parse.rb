@@ -8,9 +8,9 @@ end
 
 # Heavy lifter to parse and execute lines of Double-U code
 class Main
-  def initialize(src, s_option)
+  def initialize(src, options)
     @src = src
-    @s_option = s_option
+    @options = options
     @list = ListImpl.new
     @num = NumImpl.new
     @noarg = NoArgImpl.new
@@ -23,9 +23,15 @@ class Main
     raise DoubleUError, "Double-u runtime error: #{string}. (line #{@linenum})"
   end
 
-  def convert_strings(inst)
-    inst.gsub!(/(['"]).*?\1/) { |s| s[1..-2].unpack('C*').to_s }
-    inst.delete!(',')
+  def numify(inst)
+    return inst unless @options[:string]
+    # The 'S' option converts all strings to arrays of ints (like char*'s in C)
+    inst.gsub(/(['"]).*?\1/) { |s| s[1..-2].unpack('C*').to_s }.delete(',')
+  end
+
+  def stringify(a)
+    # The 'P' option formats output arrays as strings
+    @options[:print] && a.is_a?(Array) ? a.pack('C*') : a
   end
 
   def num_regex
@@ -82,7 +88,8 @@ class Main
     case exp
     when /^#{array_regex}$/ then to_list(exp)
     when /^#{num_regex}$/ then to_num(exp)
-    else execline(exp)
+    when /^$/ then nil
+    else parse_line(exp)
     end
   end
 
@@ -94,13 +101,13 @@ class Main
   def parse_line(inst)
     # Inline comment or brackets around code
     if /^(?<code>.*?);.*$|^\((?<code>.*)\)$/ =~ inst
-      execline(code.strip)
+      parse_line(code.strip)
     # Variable assignment
     elsif /^let +(?<var>\w+) *= *(?<exp>.*)$/ =~ inst
       set_var(var, parse_expr(exp))
     # Printing the result of an expression
     elsif /^print +(?<code>.*)$/ =~ inst
-      safe_print(execline(code))
+      safe_print(parse_line(code))
     # Adding two numbers or array variables
     elsif /^merge +(?<v1>\w+) (?<v2>\w+)$/ =~ inst
       merge(v1, v2)
@@ -118,9 +125,7 @@ class Main
   def execline(inst)
     # skip blank spaces and comments
     return if inst =~ /^\s*(;|$)/
-    # The 'S' option converts all strings to arrays of ints (like char*'s in C)
-    convert_strings(inst) if @s_option
-    parse_line(inst.strip.downcase)
+    stringify(parse_line(numify(inst).strip.downcase))
   rescue NoMethodError => e
     raise e unless e.message.include?('Impl')
     base_message = e.message.split("\n").first

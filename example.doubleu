@@ -88,3 +88,7 @@ print wrap! 10            ; Outputs a random array of n elements
 print chain! 20           ; Chains a number of commands together
 print coerce! mean! [1 2] ; Converts Rational -> Float; Float -> Int
 print build! 97           ; Creates a list with mean n
+print fill! 3             ; Crates a random-length array filled with n's
+
+;; Other
+print random!             ; Returns a random number in the range [0,1]
