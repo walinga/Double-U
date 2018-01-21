@@ -75,13 +75,11 @@ class Main
     find_type(input, name).send("Impl_#{name}", input)
   end
 
-  def merge(k1, k2)
-    v1 = get_var(k1)
-    v2 = get_var(k2)
-    if find_type(v1, 'merge') != find_type(v2, 'merge')
-      error "Type inputs to merge don't match"
-    end
-    v1 + v2
+  def merge(names)
+    vals = names.split.map { |v| get_var(v) }
+    all_match = vals.map { |v| find_type(v, 'merge') }.uniq.length == 1
+    error "Type inputs to merge don't match" unless all_match
+    vals.reduce(:+)
   end
 
   def parse_expr(exp)
@@ -108,9 +106,9 @@ class Main
     # Printing the result of an expression
     elsif /^print +(?<code>.*)$/ =~ inst
       safe_print(parse_line(code))
-    # Adding two numbers or array variables
-    elsif /^merge +(?<v1>\w+) (?<v2>\w+)$/ =~ inst
-      merge(v1, v2)
+    # Adding any number of ints or lists
+    elsif /^merge!(?<vs>(?: *\w+)+)$/ =~ inst
+      merge(vs)
     # Function call
     elsif /^(?<cmd>[a-z]+)! *(?<exp>.*)$/ =~ inst
       call_function(cmd, parse_expr(exp))
