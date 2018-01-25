@@ -1,4 +1,4 @@
-require_relative 'rational-help'
+require_relative 'rational_help'
 
 #
 ## Useful List Implementations

@@ -1,5 +1,5 @@
-require_relative 'list-impl'
-require_relative 'rational-help'
+require_relative 'list_impl'
+require_relative 'rational_help'
 
 #
 ## Functions which take integers as input

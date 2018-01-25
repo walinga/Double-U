@@ -1,0 +1,30 @@
+;;
+;; Does a==b ?
+;;
+
+;; Run with the -p flag to give human readable output
+
+;; Initialize a and b to some random stuff
+let a = wrap! 1
+let b = wrap! 1
+
+;; Probablity says there's ~25% chance that a==b
+let default = [42]
+let a = remove! (merge! default a)
+let b = remove! (merge! default b)
+
+; Show the user what the strings are
+let _a = [97 58 32]
+print merge! _a a
+let _b = [98 58 32]
+print merge! _b b
+
+;; Gives 0 if a==b, otherwise gives 1
+let zero_if_eq = kurtosis! merge! a b
+
+let tilde = 126
+let hehe = merge! tilde zero_if_eq
+print hehe
+
+;; Should print `~`s if a==b, otherwise will print DEL (which prints as empty)
+print fill! hehe

@@ -1,7 +1,7 @@
-require_relative 'list-impl'
-require_relative 'num-impl'
-require_relative 'no-arg-impl'
-require_relative 'rational-help'
+require_relative 'list_impl'
+require_relative 'num_impl'
+require_relative 'no_arg_impl'
+require_relative 'rational_help'
 
 class DoubleUError < RuntimeError
 end
@@ -93,7 +93,7 @@ class Main
 
   def safe_print(val)
     error 'trying to print void' if val.nil?
-    print val, "\n"
+    print stringify(val), "\n"
   end
 
   def parse_line(inst)

@@ -1,5 +1,5 @@
-require_relative 'list-impl'
-require_relative 'num-impl'
+require_relative 'list_impl'
+require_relative 'num_impl'
 
 #
 ## Functions which take no arguments
