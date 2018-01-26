@@ -12,7 +12,7 @@ class Main
     @src = src
     @options = options
     @list = ListImpl.new
-    @num = NumImpl.new
+    @num = NumImpl.new(options)
     @noarg = NoArgImpl.new
     @rh = RationalHelp.new
     @vars = {} # Hash table of variables

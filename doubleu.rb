@@ -14,6 +14,10 @@ OptionParser.new do |opts|
   opts.on('-p', '--print', 'Outputs num arrays as strings') do |p|
     options[:print] = p
   end
+
+  opts.on('-r', '--restrict', 'Uses printable ascii ints to make arrays') do |r|
+    options[:restrict] = r
+  end
 end.parse!
 
 if ARGV.empty?

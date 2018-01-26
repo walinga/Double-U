@@ -5,7 +5,8 @@ require_relative 'rational_help'
 ## Functions which take integers as input
 #
 class NumImpl
-  def initialize
+  def initialize(options)
+    @range = options[:restrict] ? 32..126 : 0..1000
     @list = ListImpl.new
     @rh = RationalHelp.new
   end
@@ -15,7 +16,7 @@ class NumImpl
   end
 
   def Impl_wrap(i)
-    Array.new(i.abs) { rand(1000) }
+    Array.new(i.abs) { rand(@range) }
   end
 
   # Selects a random command for the input, prints, and executes it
@@ -42,7 +43,7 @@ class NumImpl
 
   # Creates a generator based on the size and sign of i
   def get_gen(i)
-    return -500..500 unless i.is_a?(Float) || i.abs > 500
+    return @range unless i.is_a?(Float) || !@range.include?(i)
     i > 0 ? 0..(2 * i) : (2 * i)..0
   end
 
@@ -55,8 +56,7 @@ class NumImpl
     out = Array.new(length / 2) { rand(gen) }
     out += out.map { |k| 2 * i - k }
     out += [i] if length.odd?
-
-    i.is_a?(Rational) ? out.map { |p| @rh.r2n(p) }.shuffle! : out
+    out.map { |p| @rh.r2n(p) }
   end
 
   def Impl_fill(i)
