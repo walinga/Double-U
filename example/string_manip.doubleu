@@ -3,6 +3,7 @@
 ;;
 
 ;; Run with the -p flag to give human readable output
+;; Run with the -r flag to restrict the values of a and b to [32,126]
 
 ;; Initialize a and b to some random stuff
 let a = wrap! 1
