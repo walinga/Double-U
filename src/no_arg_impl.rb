@@ -1,10 +1,15 @@
 require_relative 'list_impl'
 require_relative 'num_impl'
+require_relative 'multi_arg_impl'
 
 #
 ## Functions which take no arguments
 #
 class NoArgImpl
+  def initialize
+    @objs = [ListImpl.new, NumImpl.new({}), MultiArgImpl.new, self]
+  end
+
   # Gathers a list of methods and prints them
   def get_methods(obj)
     raw_name = obj.class.name.gsub('Impl', '')
@@ -14,8 +19,7 @@ class NoArgImpl
   end
 
   def Impl_help
-    objs = [ListImpl.new, NumImpl.new, self]
-    count = objs.map { |o| get_methods(o) }.flatten.count
+    count = @objs.map { |o| get_methods(o) }.flatten.count
     puts "\nType `exit` or `q` to exit"
     count
   end

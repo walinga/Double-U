@@ -36,8 +36,12 @@ let 0x_17 = 23
 print 0x_17
 
 ;; Merge can be used to add arrays or ints
-let g = merge! x y  ; x and y are arrays
-let h = merge! a b  ; a and b are ints
+print merge! x y  ; x and y are arrays
+print merge! a b  ; a and b are ints
+
+;; Similarly, difference can be used to subtract arrays or ints
+print difference! x y
+print difference! a b
 
 ;; Numerical inputs may also be negative, fractional or decimal
 let x = -9.3333

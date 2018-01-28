@@ -23,9 +23,6 @@ print merge! _b b
 ;; Gives 0 if a==b, otherwise gives 1
 let zero_if_eq = kurtosis! merge! a b
 
-let tilde = 126
-let hehe = merge! tilde zero_if_eq
-print hehe
-
-;; Should print `~`s if a==b, otherwise will print DEL (which prints as empty)
-print fill! hehe
+let one = 1
+;; Prints 1 if a==b, otherwise prints 0
+print coerce! coerce! difference! one zero_if_eq

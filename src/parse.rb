@@ -1,6 +1,7 @@
 require_relative 'list_impl'
 require_relative 'num_impl'
 require_relative 'no_arg_impl'
+require_relative 'multi_arg_impl'
 require_relative 'rational_help'
 
 class DoubleUError < RuntimeError
@@ -14,6 +15,7 @@ class Main
     @list = ListImpl.new
     @num = NumImpl.new(options)
     @noarg = NoArgImpl.new
+    @multi_arg = MultiArgImpl.new
     @rh = RationalHelp.new
     @vars = {} # Hash table of variables
     @linenum = 1 # variable; used for error messages
@@ -75,11 +77,11 @@ class Main
     find_type(input, name).send("Impl_#{name}", input)
   end
 
-  def merge(names)
-    vals = names.split.map { |v| get_var(v) }
+  def multi_arg(name, inputs)
+    vals = inputs.split.map { |v| get_var(v) }
     all_match = vals.map { |v| find_type(v, 'merge') }.uniq.length == 1
     error "Type inputs to merge don't match" unless all_match
-    vals.reduce(:+)
+    @multi_arg.send("Impl_#{name}", vals)
   end
 
   def parse_expr(exp)
@@ -106,9 +108,9 @@ class Main
     # Printing the result of an expression
     elsif /^print +(?<code>.*)$/ =~ inst
       safe_print(parse_line(code))
-    # Adding any number of ints or lists
-    elsif /^merge!(?<vs>(?: *\w+)+)$/ =~ inst
-      merge(vs)
+    # Function with multiple arguments
+    elsif /^(?<cmd>[a-z]+)! *(?<vs>(?:\w+ +)+\w+)$/ =~ inst
+      multi_arg(cmd, vs)
     # Function call
     elsif /^(?<cmd>[a-z]+)! *(?<exp>.*)$/ =~ inst
       call_function(cmd, parse_expr(exp))
