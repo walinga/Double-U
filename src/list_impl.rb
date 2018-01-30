@@ -8,27 +8,27 @@ class ListImpl
     @rh = RationalHelp.new
   end
 
-  def Impl_shuffle(x)
+  def impl_shuffle(x)
     x.dup.shuffle!
   end
 
-  def Impl_select(x)
+  def impl_select(x)
     x.empty? ? 0 : x.sample
   end
 
-  def Impl_mean(x)
+  def impl_mean(x)
     return 0 if x.empty?
     @rh.r_div(x.reduce(:+), x.length)
   end
 
-  def Impl_median(x)
+  def impl_median(x)
     return 0 if x.empty?
     y = x.sort
     l = y.length / 2
-    y.length.odd? ? y[l] : Impl_mean(y[l - 1, 2])
+    y.length.odd? ? y[l] : impl_mean(y[l - 1, 2])
   end
 
-  def Impl_mode(x)
+  def impl_mode(x)
     return 0 if x.empty?
     freq = {}
     x.each { |i| freq[i] = (freq[i] || 0) + 1 }
@@ -36,27 +36,27 @@ class ListImpl
     freq.select { |_k, v| v == max }.map(&:first).sample
   end
 
-  def Impl_remove(x)
+  def impl_remove(x)
     y = x.dup
     y.delete_at(rand(x.length))
     y
   end
 
-  def Impl_subset(x)
+  def impl_subset(x)
     x.sample(rand(0..x.length))
   end
 
-  def Impl_size(x)
+  def impl_size(x)
     x.length
   end
 
-  def Impl_variance(x)
+  def impl_variance(x)
     return 0 if x.empty?
     sqr_x = x.map { |n| n**2 }
-    Impl_mean(sqr_x) - Impl_mean(x)**2
+    impl_mean(sqr_x) - impl_mean(x)**2
   end
 
-  def Impl_range(x)
+  def impl_range(x)
     return 0 if x.empty?
     x.max - x.min
   end
@@ -66,17 +66,17 @@ class ListImpl
     m = (x.length + 1) * p
     return 0 if m < 1 || m > x.length
     j = m.floor
-    j == m ? x[m - 1] : Impl_mean(x[j - 1, 2])
+    j == m ? x[m - 1] : impl_mean(x[j - 1, 2])
   end
 
-  def Impl_iqr(x)
+  def impl_iqr(x)
     y = x.sort
     upper = pth_quantile(y, 0.75)
     lower = pth_quantile(y, 0.25)
     @rh.r2n(upper - lower)
   end
 
-  def Impl_quantile(x)
+  def impl_quantile(x)
     y = x.sort
     pth_quantile(y, rand.round(2))
   end
@@ -84,45 +84,45 @@ class ListImpl
   ## This section is for functions built using those above
   #
 
-  def Impl_std(x)
-    Math.sqrt(Impl_variance(x))
+  def impl_std(x)
+    Math.sqrt(impl_variance(x))
   end
 
-  def Impl_average(x)
-    Impl_select([Impl_mean(x), Impl_median(x), Impl_mode(x)])
+  def impl_average(x)
+    impl_select([impl_mean(x), impl_median(x), impl_mode(x)])
   end
 
-  def Impl_gmdl(x)
-    Impl_mean(Array.new(Impl_select(x).abs) { Impl_average(x) })
+  def impl_gmdl(x)
+    impl_mean(Array.new(impl_select(x).abs) { impl_average(x) })
   end
 
-  def Impl_trim(x)
-    trim = Impl_std(x).to_i
-    trim.times { x = Impl_remove(x) }
-    Impl_shuffle(x)
+  def impl_trim(x)
+    trim = impl_std(x).to_i
+    trim.times { x = impl_remove(x) }
+    impl_shuffle(x)
   end
 
-  def Impl_normalize(x)
-    mu = Impl_mean(x)
-    std_dev = Impl_std(x)
+  def impl_normalize(x)
+    mu = impl_mean(x)
+    std_dev = impl_std(x)
     return x if std_dev.zero?
     x.map { |n| (n - mu) / std_dev }
   end
 
   def shape_desc(x, desc)
-    v = Impl_variance(x)
+    v = impl_variance(x)
     return 0 if v.zero?
-    mu = Impl_mean(x)
+    mu = impl_mean(x)
     top = x.map { |n| (n - mu)**desc }.reduce(:+)
     numerator = @rh.r_div(top, x.length)
     numerator / v**(desc / 2r)
   end
 
-  def Impl_skewness(x)
+  def impl_skewness(x)
     shape_desc(x, 3)
   end
 
-  def Impl_kurtosis(x)
+  def impl_kurtosis(x)
     shape_desc(x, 4)
   end
 end

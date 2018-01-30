@@ -12,19 +12,19 @@ class NoArgImpl
 
   # Gathers a list of methods and prints them
   def get_methods(obj)
-    raw_name = obj.class.name.gsub('Impl', '')
+    raw_name = obj.class.name.gsub('impl', '')
     puts "\n#{raw_name} functions:"
-    meths = obj.methods.grep(/Impl/)
-    meths.each { |m| puts m.to_s.gsub('Impl_', '') + '!' }
+    meths = obj.methods.grep(/impl/)
+    meths.each { |m| puts m.to_s.gsub('impl_', '') + '!' }
   end
 
-  def Impl_help
+  def impl_help
     count = @objs.map { |o| get_methods(o) }.flatten.count
     puts "\nType `exit` or `q` to exit"
     count
   end
 
-  def Impl_random
+  def impl_random
     rand
   end
 end
