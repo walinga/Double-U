@@ -12,11 +12,17 @@ The main data structure of Double-U is the array, which can be specified as for
 example, `[ 1 2 4 ]`. The various built-in functions are able to manipulate 
 arrays to produce interesting results.
 
-Built-in functions:
-`let <name> = <value>` - assigns value to name, where value can be an array or int.
-`print <name>` - outputs the value of name to standard out.
-`merge! <name1> <name1>` - combines the values of name1 and name2 into a new array.
-`<fn>! <arr>` - calls the list function fn with arr as the parameter (see below)
+### Built-in functions:
+
+`let <name> = <value>` - assigns *value* to *name*, where *value* can be an array or int.
+
+`print <var>` - outputs the value of *var* to standard out.
+
+`define <cmd> = <fn>! ... <fn>!` - creates a new function *cmd* with the specified behaviour.
+
+`merge! <var1> <var2>` - combines the values of *var1* and *var2* into a new array.
+
+`<fn>! <arr>` - calls the list function *fn!* with *arr* as the parameter (see below)
 
 See example.doubleu for concrete examples of these functions and their uses.
 

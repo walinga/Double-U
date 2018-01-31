@@ -20,14 +20,6 @@ class Main
     @linenum = 1 # variable; used for error messages
   end
 
-  def num_regex
-    %r{-?\d+((\.|/)\d+)?}
-  end
-
-  def array_regex
-    /\[ *((?:#{num_regex} +)*#{num_regex}?)\]/
-  end
-
   def set_var(name, val)
     @ph.error 'trying to assign void to a variable' if val.nil?
     @vars[name.to_sym] = val
@@ -52,30 +44,36 @@ class Main
     find_type(input, name).send("impl_#{name}", input)
   end
 
-  def multi_arg(name, inputs)
+  def split_args(name, inputs)
     vals = inputs.split.map { |v| get_var(v) }
     all_match = vals.map { |v| find_type(v, name) }.uniq.length == 1
-    @ph.error "Type inputs to #{name} don't match" unless all_match
-    @multi_arg.send("impl_#{name}", vals)
+    all_match ? vals : (@ph.error "Type inputs to #{name} don't match")
   end
 
   def parse_expr(exp)
     case exp
-    when /^#{array_regex}$/ then @ph.to_list(exp)
-    when /^#{num_regex}$/ then @ph.to_num(exp)
+    when /^#{@ph.array_regex}$/ then @ph.to_list(exp)
+    when /^#{@ph.num_regex}$/ then @ph.to_num(exp)
     when /^$/ then nil
     else parse_line(exp)
     end
   end
 
-  def safe_print(val)
-    @ph.error 'trying to print void' if val.nil?
-    print @ph.stringify(val), "\n"
+  # Basic idea is that user defined functions get added to the Main class
+  # Returns a string specifying the function named
+  def define_func(cmd, defn)
+    objs = [@list, @num, @multi_arg, @noarg]
+    @ph.check_if_definable(objs, cmd, defn)
+    define_singleton_method("impl_#{cmd}") { |p| execline("#{defn} #{p}") }
+    cmd + '!'
   end
 
   def function_triage(cmd, exp)
-    if /^((?:\w+ +)+\w+)$/ =~ exp
-      multi_arg(cmd, exp)
+    impl_cmd = "impl_#{cmd}"
+    if methods.include? impl_cmd.to_sym
+      send(impl_cmd, exp)
+    elsif /^((?:\w+ +)+\w+)$/ =~ exp
+      @multi_arg.send(impl_cmd, split_args(cmd, exp))
     else
       call_function(cmd, parse_expr(exp))
     end
@@ -87,7 +85,9 @@ class Main
       set_var(var, parse_expr(exp))
     # Printing the result of an expression
     elsif /^print +(?<code>.*)$/ =~ inst
-      safe_print(parse_line(code))
+      @ph.safe_print(parse_line(code))
+    elsif /^define (?<cmd>[a-z]+)! *=(?<defn>(?: *[a-z]+!)+)$/ =~ inst
+      define_func(cmd, defn)
     else
       @ph.error 'Invalid instruction'
     end
@@ -108,18 +108,12 @@ class Main
     end
   end
 
-  def handle_no_method(e)
-    raise e unless e.message.include?('impl')
-    base_message = e.message.split("\n").first
-    @ph.error base_message.gsub(/#<(\w+).*>/, 'type \1').gsub(/impl_?/i, '')
-  end
-
   def execline(inst)
     # skip blank spaces and comments
     return if inst =~ /^\s*(;|$)/
     @ph.stringify(parse_line(@ph.numify(inst).strip.downcase))
   rescue NoMethodError => e
-    handle_no_method(e)
+    @ph.handle_no_method(e)
   end
 
   def run
