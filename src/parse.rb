@@ -11,11 +11,11 @@ end
 class Main
   def initialize(src, options)
     @src = src
+    @ph = ParseHelp.new(options)
     @list = ListImpl.new
     @num = NumImpl.new(options)
-    @noarg = NoArgImpl.new
+    @noarg = NoArgImpl.new(@ph)
     @multi_arg = MultiArgImpl.new
-    @ph = ParseHelp.new(options)
     @vars = {} # Hash table of variables
     @linenum = 1 # variable; used for error messages
   end
@@ -60,11 +60,12 @@ class Main
   end
 
   # Basic idea is that user defined functions get added to the Main class
-  # Returns a string specifying the function named
+  # Returns a string specifying the function name
   def define_func(cmd, defn)
     objs = [@list, @num, @multi_arg, @noarg]
     @ph.check_if_definable(objs, cmd, defn)
     define_singleton_method("impl_#{cmd}") { |p| execline("#{defn} #{p}") }
+    @ph.add_user_def(cmd)
     cmd + '!'
   end
 

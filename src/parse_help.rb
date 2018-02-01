@@ -4,6 +4,7 @@ require_relative 'rational_help'
 class ParseHelp
   def initialize(options)
     @options = options
+    @user_def = []
     @rh = RationalHelp.new
   end
 
@@ -60,5 +61,13 @@ class ParseHelp
   def safe_print(val)
     error 'trying to print void' if val.nil?
     print stringify(val), "\n"
+  end
+
+  def add_user_def(ud)
+    @user_def << ud
+  end
+
+  def print_user_defs
+    @user_def.map { |m| puts m + '!' }
   end
 end

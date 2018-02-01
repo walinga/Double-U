@@ -1,19 +1,18 @@
 require_relative 'list_impl'
 require_relative 'num_impl'
 require_relative 'multi_arg_impl'
-require_relative 'parse_help'
 
 #
 ## Functions which take no arguments
 #
 class NoArgImpl
-  def initialize
+  def initialize(parse_help)
     @objs = [ListImpl.new, NumImpl.new({}), MultiArgImpl.new, self]
-    @ph = ParseHelp.new({})
+    @ph = parse_help
   end
 
   def output_name(obj)
-    raw_name = obj.class.name.gsub('impl', '')
+    raw_name = obj.class.name.gsub('Impl', '')
     puts "\n#{raw_name} functions:"
   end
 
@@ -22,8 +21,10 @@ class NoArgImpl
       output_name(o)
       @ph.get_methods(o).map { |m| puts m }
     end
+    puts "\nUser defined functions:"
+    user_defs = @ph.print_user_defs
     puts "\nType `exit` or `q` to exit"
-    pmeths.flatten.count
+    pmeths.flatten.count + user_defs.count
   end
 
   def impl_random
