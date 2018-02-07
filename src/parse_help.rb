@@ -2,14 +2,20 @@ require_relative 'rational_help'
 
 # Helper class for parsing numbers, arrays, and for enforcing options
 class ParseHelp
-  def initialize(options)
+  def initialize(options, no_arg)
+    @noarg = no_arg
     @options = options
-    @user_def = []
     @rh = RationalHelp.new
   end
 
-  def error(string)
-    raise DoubleUError, "Double-u runtime error: #{string}. (line #{@linenum})"
+  def error(string, args = {})
+    base = "Double-u runtime error: #{string}. (line #{@linenum})"
+    if args[:var_undef]
+      meths = @noarg.objs.map { |o| @noarg.get_methods(o) }
+      dym = "\nDid you mean: #{args[:var_undef]}! (with a ! 'bang')"
+      base += dym if meths.flatten.include?(args[:var_undef] + '!')
+    end
+    raise DoubleUError, base
   end
 
   def num_regex
@@ -26,14 +32,8 @@ class ParseHelp
     error base_message.gsub(/#<(\w+).*>/, 'type \1').gsub(/impl_?/i, '')
   end
 
-  # Gathers a list of impl methods for obj
-  def get_methods(obj)
-    meths = obj.methods.grep(/impl/)
-    meths.map { |m| m.to_s.gsub('impl_', '') + '!' }
-  end
-
   def check_if_definable(objs, cmd, defn)
-    overlaps = objs.map { |o| get_methods(o).include?("#{cmd}!") }
+    overlaps = objs.map { |o| @noarg.get_methods(o).include?("#{cmd}!") }
     error "#{cmd} already defined" if overlaps.any?
     error 'infinitely recursive function' if defn =~ /(?<!\w)#{cmd}!/
   end
@@ -61,13 +61,5 @@ class ParseHelp
   def safe_print(val)
     error 'trying to print void' if val.nil?
     print stringify(val), "\n"
-  end
-
-  def add_user_def(ud)
-    @user_def << ud
-  end
-
-  def print_user_defs
-    @user_def.map { |m| puts m + '!' }
   end
 end

@@ -11,11 +11,11 @@ end
 class Main
   def initialize(src, options)
     @src = src
-    @ph = ParseHelp.new(options)
     @list = ListImpl.new
     @num = NumImpl.new(options)
-    @noarg = NoArgImpl.new(@ph)
     @multi_arg = MultiArgImpl.new
+    @noarg = NoArgImpl.new([@list, @num, @multi_arg])
+    @ph = ParseHelp.new(options, @noarg)
     @vars = {} # Hash table of variables
     @linenum = 1 # variable; used for error messages
   end
@@ -27,7 +27,9 @@ class Main
 
   def get_var(name)
     lookup = name.to_sym
-    @ph.error "Variable #{name} undeclared" unless @vars.key?(lookup)
+    unless @vars.key?(lookup)
+      @ph.error("Variable #{name} undeclared", var_undef: name)
+    end
     @vars[lookup]
   end
 
@@ -65,7 +67,7 @@ class Main
     objs = [@list, @num, @multi_arg, @noarg]
     @ph.check_if_definable(objs, cmd, defn)
     define_singleton_method("impl_#{cmd}") { |p| execline("#{defn} #{p}") }
-    @ph.add_user_def(cmd)
+    @noarg.add_user_def(cmd)
     cmd + '!'
   end
 
