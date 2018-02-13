@@ -5,10 +5,10 @@ require_relative 'rational_help'
 ## Functions which take integers as input
 #
 class NumImpl
-  def initialize(options)
+  def initialize(options, list, rational_help)
     @range = options[:restrict] ? 32..126 : 0..1000
-    @list = ListImpl.new
-    @rh = RationalHelp.new
+    @list = list
+    @rh = rational_help
   end
 
   def impl_twist(i)

@@ -11,11 +11,12 @@ end
 class Main
   def initialize(src, options)
     @src = src
-    @list = ListImpl.new
-    @num = NumImpl.new(options)
+    @rh = RationalHelp.new
+    @list = ListImpl.new(@rh)
+    @num = NumImpl.new(options, @list, @rh)
     @multi_arg = MultiArgImpl.new
     @noarg = NoArgImpl.new([@list, @num, @multi_arg])
-    @ph = ParseHelp.new(options, @noarg)
+    @ph = ParseHelp.new(options, @noarg, @rh)
     @vars = {} # Hash table of variables
     @linenum = 1 # variable; used for error messages
   end

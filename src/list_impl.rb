@@ -4,8 +4,8 @@ require_relative 'rational_help'
 ## Useful List Implementations
 #
 class ListImpl
-  def initialize
-    @rh = RationalHelp.new
+  def initialize(rational_help)
+    @rh = rational_help
   end
 
   def impl_shuffle(x)

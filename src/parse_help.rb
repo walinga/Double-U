@@ -2,10 +2,10 @@ require_relative 'rational_help'
 
 # Helper class for parsing numbers, arrays, and for enforcing options
 class ParseHelp
-  def initialize(options, no_arg)
+  def initialize(options, no_arg, rational_help)
     @noarg = no_arg
     @options = options
-    @rh = RationalHelp.new
+    @rh = rational_help
   end
 
   def error(string, args = {})
