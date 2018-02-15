@@ -61,3 +61,7 @@ Using the `-s` or `--string` option will replace string occurences by an array o
 Using the `-p` or `--print` option will output all arrays as strings. `-s` and `-p` can be combined to allow string manipulation in Double-U.
 
 Using the `-r` or `--restrict` option will ensure that arrays built by `build!` or `wrap!` will only contain ints in the range [32-126] (printable ascii).
+
+### Arguments:
+
+Arguments can be passed to a Double-U script like this: `ruby doubleu.rb <script>.doubleu <arg1> <arg2>...`. Arguments can be accessed in a Double-U script using the special variables `_1`, `_2`, etc. Be careful though, as these special variables can be overwritten; in a sense they are just like any other variable.

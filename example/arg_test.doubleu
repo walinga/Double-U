@@ -3,7 +3,13 @@
 ;
 
 ;; Read in 4 args
+;; This script will throw an error if at least 4 args are not supplied.
+
+;; Print the args in order
 print _1
 print _2
 print _3
 print _4
+
+define x! = shuffle!
+print help!

@@ -2,17 +2,14 @@
 ;; Does a==b ?
 ;;
 
+;; Takes two args: a and b
+
 ;; Run with the -p flag to give human readable output
 ;; Run with the -r flag to restrict the values of a and b to [32,126]
 
 ;; Initialize a and b to some random stuff
-let a = wrap! 1
-let b = wrap! 1
-
-;; Probablity says there's ~25% chance that a==b
-let default = [42]
-let a = remove! (merge! default a)
-let b = remove! (merge! default b)
+let a = list! _1
+let b = list! _2
 
 ; Show the user what the strings are
 let _a = [97 58 32]

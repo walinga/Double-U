@@ -50,11 +50,16 @@ class ListImpl
     x.length
   end
 
-  def impl_variance(x)
+  # Helper for variance, denom is different for kurtosis
+  def general_var(x, denom)
     n = x.length
-    return 0 if n <= 1
+    return 0 if denom <= 0
     a = x.map { |e| e**2 }.reduce(:+) - @rh.r_div(x.reduce(:+)**2, n)
-    @rh.r_div(a, n - 1)
+    @rh.r_div(a, denom)
+  end
+
+  def impl_variance(x)
+    general_var(x, x.length - 1)
   end
 
   def impl_range(x)
@@ -111,7 +116,7 @@ class ListImpl
   end
 
   def shape_desc(x, desc)
-    v = impl_variance(x)
+    v = general_var(x, x.length)
     return 0 if v.zero?
     mu = impl_mean(x)
     top = x.map { |n| (n - mu)**desc }.reduce(:+)

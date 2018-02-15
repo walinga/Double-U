@@ -23,7 +23,7 @@ class Main
 
   def setup_args(args)
     x = 0
-    args.map { |a| set_var("_#{x += 1}", a) }
+    args.map { |a| set_var("_#{x += 1}", parse_expr(a)) }
   end
 
   def set_var(name, val)

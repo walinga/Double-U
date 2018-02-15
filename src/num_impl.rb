@@ -62,4 +62,9 @@ class NumImpl
   def impl_fill(i)
     Array.new(rand(0..1000)) { i }
   end
+
+  # Sometimes we want to treat a number as an array
+  def impl_list(i)
+    [i]
+  end
 end
