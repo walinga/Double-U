@@ -14,11 +14,10 @@ class Main
     @rh = RationalHelp.new
     @list = ListImpl.new(@rh)
     @num = NumImpl.new(options, @list, @rh)
-    @multi_arg = MultiArgImpl.new
+    @multi_arg = MultiArgImpl.new(@rh, @list)
     @noarg = NoArgImpl.new([@list, @num, @multi_arg])
     @ph = ParseHelp.new(options, @noarg, @rh)
     @vars = {} # Hash table of variables
-    @linenum = 1 # variable; used for error messages
   end
 
   def set_var(name, val)
@@ -124,7 +123,7 @@ class Main
     # Since Double-U is a command-based language, we parse each line separately
     @src.split("\n").each do |inst|
       execline inst
-      @linenum += 1
+      @ph.update_linenum
     end
   end
 end

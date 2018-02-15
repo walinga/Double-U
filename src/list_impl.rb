@@ -51,9 +51,10 @@ class ListImpl
   end
 
   def impl_variance(x)
-    return 0 if x.empty?
-    sqr_x = x.map { |n| n**2 }
-    impl_mean(sqr_x) - impl_mean(x)**2
+    n = x.length
+    return 0 if n <= 1
+    a = x.map { |e| e**2 }.reduce(:+) - @rh.r_div(x.reduce(:+)**2, n)
+    @rh.r_div(a, n - 1)
   end
 
   def impl_range(x)

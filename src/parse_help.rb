@@ -6,6 +6,7 @@ class ParseHelp
     @noarg = no_arg
     @options = options
     @rh = rational_help
+    @linenum = 1
   end
 
   def error(string, args = {})
@@ -61,5 +62,9 @@ class ParseHelp
   def safe_print(val)
     error 'trying to print void' if val.nil?
     print stringify(val), "\n"
+  end
+
+  def update_linenum
+    @linenum += 1
   end
 end

@@ -94,5 +94,16 @@ print coerce! mean! [1 2] ; Converts Rational -> Float; Float -> Int
 print build! 97           ; Creates a list with mean n
 print fill! 3             ; Crates a random-length array filled with n's
 
+;; Multi-Arg functions
+let x = [1 2 3]
+let y = [4 5 7]
+print cov! x y    ; Covariance (determines whether data is related)
+print corr! x y   ; Correlation (how closely datasets are related)
+let a = 1
+let b = 2
+let c = 5
+print cov! a b c  ; Same as variance!, but taking nums instead of a list
+print corr! a b c ; Same as std!, but taking nums instead of a list
+
 ;; Other
 print random!             ; Returns a random number in the range [0,1]
