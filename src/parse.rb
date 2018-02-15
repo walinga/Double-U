@@ -9,7 +9,7 @@ end
 
 # Heavy lifter to parse and execute lines of Double-U code
 class Main
-  def initialize(src, options)
+  def initialize(src, args, options)
     @src = src
     @rh = RationalHelp.new
     @list = ListImpl.new(@rh)
@@ -18,6 +18,12 @@ class Main
     @noarg = NoArgImpl.new([@list, @num, @multi_arg])
     @ph = ParseHelp.new(options, @noarg, @rh)
     @vars = {} # Hash table of variables
+    setup_args(args)
+  end
+
+  def setup_args(args)
+    x = 0
+    args.map { |a| set_var("_#{x += 1}", a) }
   end
 
   def set_var(name, val)
@@ -112,6 +118,7 @@ class Main
   end
 
   def execline(inst)
+    @ph.update_linenum
     # skip blank spaces and comments
     return if inst =~ /^\s*(;|$)/
     @ph.stringify(parse_line(@ph.numify(inst).strip.downcase))
@@ -121,9 +128,6 @@ class Main
 
   def run
     # Since Double-U is a command-based language, we parse each line separately
-    @src.split("\n").each do |inst|
-      execline inst
-      @ph.update_linenum
-    end
+    @src.split("\n").each { |inst| execline(inst) }
   end
 end

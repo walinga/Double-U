@@ -1,0 +1,9 @@
+;
+;; DOUBLE-U ARG TEST
+;
+
+;; Read in 4 args
+print _1
+print _2
+print _3
+print _4

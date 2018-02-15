@@ -5,7 +5,7 @@ require_relative 'repl'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = 'Usage: ruby doubleu.rb [source.doubleu] [options]'
+  opts.banner = 'Usage: ruby doubleu.rb [source.doubleu] [options] [args]'
 
   opts.on('-s', '--string', 'Convert strings to int arrays') do |s|
     options[:string] = s
@@ -21,11 +21,11 @@ OptionParser.new do |opts|
 end.parse!
 
 if ARGV.empty?
-  Repl.new.run(Main.new('', options))
+  Repl.new.run(Main.new('', [], options))
 else
   source = File.read(ARGV.shift)
 
-  code = Main.new(source, options)
+  code = Main.new(source, ARGV, options)
 
   begin
     code.run
