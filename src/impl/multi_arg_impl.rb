@@ -4,8 +4,9 @@
 ## Every function should accept both [[],[]] or [1,2,3]
 #
 class MultiArgImpl
-  def initialize(rational_help, list)
+  def initialize(rational_help, err, list)
     @rh = rational_help
+    @err = err
     @list = list
   end
 
@@ -18,7 +19,7 @@ class MultiArgImpl
   end
 
   def throw_cov_error
-    raise DoubleUError, 'Too many arguments to cov/corr (2 required)'
+    @err.error 'Too many arguments to cov/corr [2 required]'
   end
 
   def cov_calc(vals)

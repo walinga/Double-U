@@ -1,6 +1,3 @@
-require_relative 'list_impl'
-require_relative 'rational_help'
-
 #
 ## Functions which take integers as input
 #
@@ -26,6 +23,9 @@ class NumImpl
     raw = meth.to_s.gsub('impl_', '')
     print " -> #{raw}"
     obj.send(meth, input)
+  rescue DoubleUError
+    print ' (aborted)'
+    input
   end
 
   # Chains together a random sequence of i commands

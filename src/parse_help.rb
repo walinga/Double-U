@@ -1,22 +1,20 @@
-require_relative 'rational_help'
-
 # Helper class for parsing numbers, arrays, and for enforcing options
 class ParseHelp
-  def initialize(options, no_arg, rational_help)
+  def initialize(options, no_arg, rational_help, err)
     @noarg = no_arg
     @options = options
     @rh = rational_help
-    @linenum = 1
+    @err = err
   end
 
   def error(string, args = {})
-    base = "Double-u runtime error: #{string}. (line #{@linenum})"
+    base = ''
     if args[:var_undef]
       meths = @noarg.objs.map { |o| @noarg.get_methods(o) }
       dym = "\nDid you mean: #{args[:var_undef]}! (with a ! 'bang')"
       base += dym if meths.flatten.include?(args[:var_undef] + '!')
     end
-    raise DoubleUError, base
+    @err.error(string, base)
   end
 
   def num_regex
@@ -25,12 +23,6 @@ class ParseHelp
 
   def array_regex
     /\[ *((?:#{num_regex} +)*#{num_regex}?)\]/
-  end
-
-  def handle_no_method(e)
-    raise e unless e.message.include?('impl')
-    base_message = e.message.split("\n").first
-    error base_message.gsub(/#<(\w+).*>/, 'type \1').gsub(/impl_?/i, '')
   end
 
   def check_if_definable(objs, cmd, defn)
@@ -62,9 +54,5 @@ class ParseHelp
   def safe_print(val)
     error 'trying to print void' if val.nil?
     print stringify(val), "\n"
-  end
-
-  def update_linenum
-    @linenum += 1
   end
 end

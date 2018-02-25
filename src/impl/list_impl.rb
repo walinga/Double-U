@@ -1,11 +1,10 @@
-require_relative 'rational_help'
-
 #
 ## Useful List Implementations
 #
 class ListImpl
-  def initialize(rational_help)
+  def initialize(rational_help, err)
     @rh = rational_help
+    @err = err
   end
 
   def impl_shuffle(x)
@@ -13,7 +12,7 @@ class ListImpl
   end
 
   def impl_select(x)
-    x.empty? ? 0 : x.sample
+    x.empty? ? @err.error('Trying to select from empty list') : x.sample
   end
 
   def impl_mean(x)
@@ -29,7 +28,7 @@ class ListImpl
   end
 
   def impl_mode(x)
-    return 0 if x.empty?
+    @err.error('Trying to find mode of empty list') if x.empty?
     freq = {}
     x.each { |i| freq[i] = (freq[i] || 0) + 1 }
     max = freq.max_by { |_k, v| v }[1]
@@ -53,7 +52,7 @@ class ListImpl
   # Helper for variance, denom is different for kurtosis
   def general_var(x, denom)
     n = x.length
-    return 0 if denom <= 0
+    @err.error('List argument to variance too small') if denom <= 0
     a = x.map { |e| e**2 }.reduce(:+) - @rh.r_div(x.reduce(:+)**2, n)
     @rh.r_div(a, denom)
   end
@@ -83,8 +82,7 @@ class ListImpl
   end
 
   def impl_quantile(x)
-    y = x.sort
-    pth_quantile(y, rand.round(2))
+    pth_quantile(x.sort, rand.round(2))
   end
 
   ## This section is for functions built using those above

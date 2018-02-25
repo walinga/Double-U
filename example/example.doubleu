@@ -94,11 +94,13 @@ print coerce! mean! [1 2] ; Converts Rational -> Float; Float -> Int
 print build! 97           ; Creates a list with mean n
 print fill! 3             ; Crates a random-length array filled with n's
 
-;; Multi-Arg functions
+;; Multi-Arg functions - Arrays as args
 let x = [1 2 3]
 let y = [4 5 7]
 print cov! x y    ; Covariance (determines whether data is related)
 print corr! x y   ; Correlation (how closely datasets are related)
+
+;; Multi-Arg functions - Numbers as args
 let a = 1
 let b = 2
 let c = 5

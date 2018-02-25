@@ -1,22 +1,22 @@
-require_relative 'list_impl'
-require_relative 'num_impl'
-require_relative 'no_arg_impl'
-require_relative 'multi_arg_impl'
+require_relative 'impl/list_impl'
+require_relative 'impl/num_impl'
+require_relative 'impl/no_arg_impl'
+require_relative 'impl/multi_arg_impl'
 require_relative 'parse_help'
-
-class DoubleUError < RuntimeError
-end
+require_relative 'rational_help'
+require_relative 'error'
 
 # Heavy lifter to parse and execute lines of Double-U code
 class Main
   def initialize(src, args, options)
     @src = src
+    @err = ErrorHelp.new
     @rh = RationalHelp.new
-    @list = ListImpl.new(@rh)
+    @list = ListImpl.new(@rh, @err)
     @num = NumImpl.new(options, @list, @rh)
-    @multi_arg = MultiArgImpl.new(@rh, @list)
+    @multi_arg = MultiArgImpl.new(@rh, @err, @list)
     @noarg = NoArgImpl.new([@list, @num, @multi_arg])
-    @ph = ParseHelp.new(options, @noarg, @rh)
+    @ph = ParseHelp.new(options, @noarg, @rh, @err)
     @vars = {} # Hash table of variables
     setup_args(args)
   end
@@ -118,12 +118,12 @@ class Main
   end
 
   def execline(inst)
-    @ph.update_linenum
+    @err.update_linenum
     # skip blank spaces and comments
     return if inst =~ /^\s*(;|$)/
     @ph.stringify(parse_line(@ph.numify(inst).strip.downcase))
   rescue NoMethodError => e
-    @ph.handle_no_method(e)
+    @err.handle_no_method(e)
   end
 
   def run
